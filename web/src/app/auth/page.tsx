@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, Suspense } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Mail, Lock, User, ArrowRight, Sparkles, ShieldCheck, RefreshCcw, CheckCircle2 } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
@@ -9,7 +9,7 @@ import Link from 'next/link';
 
 type AuthMode = 'login' | 'signup' | 'forgot-password';
 
-export default function AuthPage() {
+function AuthContent() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const [mode, setMode] = useState<AuthMode>('login');
@@ -300,5 +300,13 @@ export default function AuthPage() {
         <span>UniSimplify Cloud</span>
       </div>
     </div>
+  );
+}
+
+export default function AuthPage() {
+  return (
+    <Suspense fallback={<div style={{ display: 'flex', height: '100vh', alignItems: 'center', justifyContent: 'center', color: '#fff' }}>Loading...</div>}>
+      <AuthContent />
+    </Suspense>
   );
 }

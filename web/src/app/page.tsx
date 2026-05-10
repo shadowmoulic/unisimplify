@@ -30,10 +30,7 @@ const PROFILE_MOCKUP = '/images/mockup-profile.png';
 const DASHBOARD_MOCKUP = '/images/mockup-dashboard.png';
 const DEADLINE_MOCKUP = '/images/mockup-deadline.png';
 
-import { useSearchParams } from 'next/navigation';
-
 export default function Home() {
-  const searchParams = useSearchParams();
   const { scrollY } = useScroll();
   const y1 = useTransform(scrollY, [0, 500], [0, -100]);
   const y2 = useTransform(scrollY, [0, 500], [0, 100]);
