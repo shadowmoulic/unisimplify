@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, Filter, MapPin, Calendar, CreditCard, Award, ChevronRight, GraduationCap, Sparkles, BookmarkPlus, CheckCircle2 } from 'lucide-react';
+import { Search, Filter, MapPin, Calendar, CreditCard, Award, ChevronRight, GraduationCap, Sparkles, BookmarkPlus, CheckCircle2, ExternalLink } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
 import collegesDataRaw from '../../data/colleges.json';
 
@@ -16,6 +16,7 @@ interface College {
   "CUET Acceptance Policy": string;
   "Accreditation / Ranking": string;
   "Average Annual Fees (INR)": string;
+  URL?: string;
   Source: string;
 }
 
@@ -198,7 +199,20 @@ export default function Discover() {
                 </div>
               </div>
 
-              <h3 className="premium-uni-name">{college["University Name"]}</h3>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
+                <h3 className="premium-uni-name" style={{ marginBottom: 0 }}>{college["University Name"]}</h3>
+                {college.URL && (
+                  <a 
+                    href={college.URL} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="visit-link"
+                    title="Visit Official Website"
+                  >
+                    <ExternalLink size={16} />
+                  </a>
+                )}
+              </div>
               
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#10b981' }}>
                 <Award size={16} />

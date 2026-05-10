@@ -76,7 +76,7 @@ export default function Home() {
           >
             <div className="tag-line">
               <ShieldCheck size={14} className="text-emerald" />
-              <span>TRUSTED BY 10,000+ STUDENTS</span>
+              <span>JOIN OUR GROWING COMMUNITY</span>
             </div>
             <h1 className="main-title">
               Apply to Multiple Colleges with <span className="text-emerald">One Profile.</span>
@@ -247,7 +247,7 @@ export default function Home() {
       <section className="final-cta">
         <div className="cta-box glass-panel">
           <h2>Ready to simplify your college search?</h2>
-          <p>Join 10,000+ students already using UniSimplify to build their future.</p>
+          <p>Join the growing community of students using UniSimplify to build their future.</p>
           <Link href="/auth?mode=signup" className="btn-primary-large">
             Create Your Universal Profile
             <ArrowRight size={20} />

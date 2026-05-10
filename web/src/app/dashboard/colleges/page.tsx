@@ -11,6 +11,7 @@ interface College {
   "University Name": string;
   "Application Fee (INR)": string;
   State: string;
+  "Application Deadline": string;
 }
 
 export default function MyCollegesPage() {
@@ -122,6 +123,7 @@ export default function MyCollegesPage() {
                 <tr style={{ borderBottom: '1px solid #e2e8f0', background: '#f8fafc' }}>
                   <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>College Name</th>
                   <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>Location</th>
+                  <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>Deadline</th>
                   <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>Application Fee</th>
                   <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>Actions</th>
                 </tr>
@@ -134,6 +136,9 @@ export default function MyCollegesPage() {
                     </td>
                     <td style={{ padding: '1rem 1.5rem', color: '#64748b', fontSize: '0.95rem' }}>
                       {college.State}
+                    </td>
+                    <td style={{ padding: '1rem 1.5rem', color: '#e11d48', fontWeight: '700', fontSize: '0.9rem' }}>
+                      {college["Application Deadline"]}
                     </td>
                     <td style={{ padding: '1rem 1.5rem', color: '#0f172a', fontWeight: '600' }}>
                       {college["Application Fee (INR)"]}

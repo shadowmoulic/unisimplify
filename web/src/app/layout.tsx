@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import "./globals.css";
 import Navbar from "@/components/Navbar";
+import GlobalFooter from "@/components/GlobalFooter";
 import StyledJsxRegistry from "./registry";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -26,6 +27,7 @@ export default function RootLayout({
           <main style={{ paddingTop: '100px' }}>
             {children}
           </main>
+          <GlobalFooter />
         </StyledJsxRegistry>
       </body>
     </html>

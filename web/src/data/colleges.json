@@ -9,7 +9,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A+, NIRF 101-150",
     "Average Annual Fees (INR)": "₹8,00,000 – ₹10,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.ashoka.edu.in",
+    "AdmissionPortalURL": "https://apply.ashoka.edu.in"
   },
   {
     "University Name": "BITS Pilani",
@@ -21,7 +23,9 @@
     "CUET Acceptance Policy": "No",
     "Accreditation / Ranking": "NAAC A, NIRF 16 (Overall) / 20 (Engineering)",
     "Average Annual Fees (INR)": "₹4,50,000 – ₹6,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.bits-pilani.ac.in",
+    "AdmissionPortalURL": "https://admissions.bits-pilani.ac.in"
   },
   {
     "University Name": "Manipal Academy of Higher Education",
@@ -33,7 +37,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A++, NIRF 14 (Overall) / 4 (University)",
     "Average Annual Fees (INR)": "₹1,70,000 – ₹6,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://manipal.edu",
+    "AdmissionPortalURL": "https://apply.manipal.edu"
   },
   {
     "University Name": "O.P. Jindal Global University",
@@ -45,7 +51,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A++, QS World Rankings (Top Law School)",
     "Average Annual Fees (INR)": "₹4,00,000 – ₹8,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://jgu.edu.in",
+    "AdmissionPortalURL": "https://jgu.edu.in/admissions"
   },
   {
     "University Name": "Symbiosis International University",
@@ -57,7 +65,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A++, NIRF 32 (University)",
     "Average Annual Fees (INR)": "₹2,50,000 – ₹6,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.siu.edu.in",
+    "AdmissionPortalURL": "https://set-test.org"
   },
   {
     "University Name": "Vellore Institute of Technology (VIT)",
@@ -69,7 +79,9 @@
     "CUET Acceptance Policy": "No",
     "Accreditation / Ranking": "NAAC A++, NIRF 11 (University)",
     "Average Annual Fees (INR)": "₹1,70,000 – ₹4,93,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://vit.ac.in",
+    "AdmissionPortalURL": "https://viteee.vit.ac.in"
   },
   {
     "University Name": "Anurag University",
@@ -81,7 +93,9 @@
     "CUET Acceptance Policy": "No",
     "Accreditation / Ranking": "NAAC A+, UGC-recognised",
     "Average Annual Fees (INR)": "₹85,000 – ₹3,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://anurag.edu.in",
+    "AdmissionPortalURL": "https://anurag.edu.in/admissions"
   },
   {
     "University Name": "Birla Global University",
@@ -93,7 +107,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC B, AACSB (Management)",
     "Average Annual Fees (INR)": "₹1,00,000 – ₹4,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.bgu.ac.in",
+    "AdmissionPortalURL": "https://admissions.bgu.ac.in"
   },
   {
     "University Name": "Chitkara University",
@@ -105,7 +121,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A+, NIRF 74 (University) / 28",
     "Average Annual Fees (INR)": "₹1,20,000 – ₹2,50,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.chitkara.edu.in",
+    "AdmissionPortalURL": "https://physical.chitkara.edu.in/"
   },
   {
     "University Name": "DIT University",
@@ -117,7 +135,9 @@
     "CUET Acceptance Policy": "Yes",
     "Accreditation / Ranking": "NAAC A+, NIRF 83 (Pharmacy) / QS I-Gauge Diamond",
     "Average Annual Fees (INR)": "₹1,06,600 – ₹1,000,700",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.dituniversity.edu.in",
+    "AdmissionPortalURL": "https://www.dituniversity.edu.in/apply-now"
   },
   {
     "University Name": "ICFAI University, Dehradun",
@@ -129,7 +149,9 @@
     "CUET Acceptance Policy": "Yes",
     "Accreditation / Ranking": "NAAC Accredited, IIRF Rank #1 (Private UK)",
     "Average Annual Fees (INR)": "₹1,10,000 – ₹2,20,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.iudehradun.edu.in",
+    "AdmissionPortalURL": "https://www.iudehradun.edu.in/admissions/online-registration"
   },
   {
     "University Name": "ITM University, Raipur",
@@ -141,7 +163,9 @@
     "CUET Acceptance Policy": "Yes",
     "Accreditation / Ranking": "NAAC B+, ARIIA Rank #13 (Promising)",
     "Average Annual Fees (INR)": "₹42,000 – ₹1,50,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.itmuniversity.org",
+    "AdmissionPortalURL": "https://www.itmuniversity.org/admissions"
   },
   {
     "University Name": "Jaipur National University",
@@ -153,7 +177,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A+, QS Asia #454",
     "Average Annual Fees (INR)": "₹80,000 – ₹2,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.jnujaipur.ac.in",
+    "AdmissionPortalURL": "https://apply.jnujaipur.ac.in"
   },
   {
     "University Name": "Kalinga University",
@@ -165,7 +191,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC B+, NIRF 101-150",
     "Average Annual Fees (INR)": "₹40,000 – ₹1,55,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://kalingauniversity.ac.in",
+    "AdmissionPortalURL": "https://kalingauniversity.ac.in/admissions"
   },
   {
     "University Name": "Marwadi University",
@@ -177,7 +205,9 @@
     "CUET Acceptance Policy": "Yes",
     "Accreditation / Ranking": "NAAC A++, NIRF 101-150",
     "Average Annual Fees (INR)": "₹50,000 – ₹1,51,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.marwadiuniversity.ac.in",
+    "AdmissionPortalURL": "https://admissions.marwadiuniversity.ac.in"
   },
   {
     "University Name": "MATS University",
@@ -189,7 +219,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A+ (2025)",
     "Average Annual Fees (INR)": "₹33,000 – ₹2,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.matsuniversity.ac.in",
+    "AdmissionPortalURL": "https://admissions.matsuniversity.ac.in"
   },
   {
     "University Name": "Medi-Caps University",
@@ -201,7 +233,9 @@
     "CUET Acceptance Policy": "No",
     "Accreditation / Ranking": "NAAC A, NIRF 59 (Overall 2024)",
     "Average Annual Fees (INR)": "₹65,000 – ₹3,15,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.medicaps.ac.in",
+    "AdmissionPortalURL": "https://admissions.medicaps.ac.in"
   },
   {
     "University Name": "Parul University",
@@ -213,7 +247,9 @@
     "CUET Acceptance Policy": "Yes",
     "Accreditation / Ranking": "NAAC A++, NIRF 41 (Pharmacy) / 47 (Innovation)",
     "Average Annual Fees (INR)": "₹1,50,000 – ₹2,65,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://paruluniversity.ac.in",
+    "AdmissionPortalURL": "https://admissions.paruluniversity.ac.in"
   },
   {
     "University Name": "SAGE University",
@@ -225,7 +261,9 @@
     "CUET Acceptance Policy": "Yes",
     "Accreditation / Ranking": "NAAC A+, QS I-Gauge Diamond",
     "Average Annual Fees (INR)": "₹60,000 – ₹2,50,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://sageuniversity.in",
+    "AdmissionPortalURL": "https://admission.sageuniversity.in"
   },
   {
     "University Name": "Sri Sri University",
@@ -237,7 +275,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A, IIRF Rank 35",
     "Average Annual Fees (INR)": "₹30,000 – ₹2,50,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://srisriuniversity.edu.in",
+    "AdmissionPortalURL": "https://apply.srisriuniversity.edu.in"
   },
   {
     "University Name": "Swarrnim Startup & Innovation Univ.",
@@ -261,7 +301,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "UGC recognized, ISO 9001:2015",
     "Average Annual Fees (INR)": "₹80,000 – ₹2,50,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.tnu.in",
+    "AdmissionPortalURL": "https://admissions.tnu.in"
   },
   {
     "University Name": "UPES",
@@ -273,7 +315,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A, NIRF 43 (Engineering) / 45",
     "Average Annual Fees (INR)": "₹1,15,000 – ₹8,00,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.upes.ac.in",
+    "AdmissionPortalURL": "https://www.upes.ac.in/apply"
   },
   {
     "University Name": "Woxsen University",
@@ -285,7 +329,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A, AACSB, QS Top 150 Young Universities",
     "Average Annual Fees (INR)": "₹1,90,000 – ₹6,37,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://woxsen.edu.in",
+    "AdmissionPortalURL": "https://admissions.woxsen.edu.in"
   },
   {
     "University Name": "Gokul Global University",
@@ -297,7 +343,9 @@
     "CUET Acceptance Policy": "No",
     "Accreditation / Ranking": "NAAC A",
     "Average Annual Fees (INR)": "₹10,000 – ₹1,25,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://gokuluniversity.ac.in",
+    "AdmissionPortalURL": "https://admissions.gokuluniversity.ac.in"
   },
   {
     "University Name": "Guru Nanak University",
@@ -309,7 +357,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "NAAC A+, UGC approved 2024",
     "Average Annual Fees (INR)": "₹60,000 – ₹2,60,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.gnuindia.org",
+    "AdmissionPortalURL": "https://www.gnuindia.org/admissions"
   },
   {
     "University Name": "KK Modi University",
@@ -321,7 +371,9 @@
     "CUET Acceptance Policy": "Optional",
     "Accreditation / Ranking": "UGC recognised, international collaborations",
     "Average Annual Fees (INR)": "₹1,00,000 – ₹2,50,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://kkmu.edu.in",
+    "AdmissionPortalURL": "https://admissions.kkmu.edu.in"
   },
   {
     "University Name": "Madhyanchal Professional Univ.",
@@ -345,7 +397,9 @@
     "CUET Acceptance Policy": "Yes",
     "Accreditation / Ranking": "UGC, AIU",
     "Average Annual Fees (INR)": "₹50,000 – ₹1,50,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.mindpoweruniversity.ac.in",
+    "AdmissionPortalURL": "https://www.mindpoweruniversity.ac.in/admissions"
   },
   {
     "University Name": "YBN University",
@@ -357,6 +411,8 @@
     "CUET Acceptance Policy": "Yes",
     "Accreditation / Ranking": "NAAC B+, UGC-recognised",
     "Average Annual Fees (INR)": "₹30,000 – ₹90,000",
-    "Source": "1-4"
+    "Source": "1-4",
+    "URL": "https://www.ybnu.ac.in",
+    "AdmissionPortalURL": "http://app.ybnu.ac.in/pub/onlineregistrationform.php"
   }
 ]
