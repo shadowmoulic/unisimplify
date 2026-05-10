@@ -1,0 +1,416 @@
+```txt
+UNISIMPLIFY
+The Common Application Layer for Indian Universities
+
+-----------------------------------
+INTRODUCTION
+-----------------------------------
+
+UniSimplify is a unified student application platform designed to simplify the college application process for students across India.
+
+Instead of filling separate forms for every university, students create one universal profile and use it to apply to multiple colleges through a single dashboard.
+
+UniSimplify aims to reduce repetitive form filling, simplify document management, help students discover relevant universities, and make the overall admission experience smoother and faster.
+
+The platform acts as an infrastructure and discovery layer — not a counseling marketplace.
+
+Core Idea:
+"Fill once. Apply everywhere."
+
+
+
+-----------------------------------
+PROBLEM STATEMENT
+-----------------------------------
+
+Students currently face several issues while applying to universities:
+
+- Every university has a separate portal
+- Repetitive form filling across applications
+- Multiple document uploads
+- Confusing eligibility criteria
+- Missed deadlines
+- Poor user experience on university websites
+- Difficulty discovering relevant colleges
+- No centralized dashboard for tracking applications
+
+UniSimplify solves this by standardizing the student application workflow.
+
+
+
+-----------------------------------
+HOW UNISIMPLIFY WORKS
+-----------------------------------
+
+1. Student creates account
+2. Student builds a universal academic profile
+3. Student uploads documents once
+4. UniSimplify recommends eligible universities
+5. Student selects universities
+6. Student applies directly through one dashboard
+7. University receives standardized application data
+
+
+
+-----------------------------------
+PLATFORM GOALS
+-----------------------------------
+
+- Reduce friction in college applications
+- Centralize student academic information
+- Standardize application workflows
+- Help students discover suitable colleges
+- Simplify university admission processing
+- Create a modern and student-friendly application experience
+
+
+
+-----------------------------------
+HOMEPAGE STRUCTURE
+-----------------------------------
+
+Hero Headline:
+Apply to Multiple Colleges with One Profile
+
+Subheadline:
+Fill your details once, discover eligible universities, and apply faster without repetitive forms.
+
+Primary CTA:
+Create Free Profile
+
+Secondary CTA:
+Explore Colleges
+
+
+
+-----------------------------------
+STUDENT ONBOARDING FLOW
+-----------------------------------
+
+STEP 1 — ACCOUNT CREATION
+- Full Name
+- Mobile Number (OTP Verification)
+- Email Address
+- Password / Google Sign In
+
+STEP 2 — PROFILE COMPLETION
+Sections include:
+- Personal Details
+- Academic Details
+- Entrance Exams
+- Documents
+- Preferences
+
+STEP 3 — DISCOVER UNIVERSITIES
+Students receive recommendations based on:
+- Eligibility
+- Course preferences
+- Budget
+- Location
+- Entrance exams
+
+STEP 4 — APPLY
+Students select universities and submit applications directly from dashboard.
+
+
+
+-----------------------------------
+UNIVERSAL STUDENT PROFILE
+-----------------------------------
+
+A universal student profile acts as the standardized application layer.
+
+This profile stores all student information in one place and is reused across multiple university applications.
+
+
+
+-----------------------------------
+SECTION 1 — PERSONAL DETAILS
+-----------------------------------
+
+- Full Name
+- First Name
+- Middle Name
+- Last Name
+- Gender
+- Date of Birth
+- Nationality
+- Category
+- Religion (optional)
+- Minority Status (optional)
+- Domicile State
+- Aadhaar Number (optional)
+- APAAR ID (optional)
+
+Parent/Guardian Information:
+- Father's Name
+- Mother's Name
+- Guardian Name
+- Parent Mobile Number
+- Parent Email Address
+
+Address Information:
+- Country
+- State
+- District
+- City
+- PIN Code
+- Full Address
+
+
+
+-----------------------------------
+SECTION 2 — ACADEMIC DETAILS
+-----------------------------------
+
+CLASS 10 DETAILS
+- School Name
+- School Board
+- Board Type
+  Examples:
+  - CBSE
+  - ICSE
+  - State Board
+  - IB
+  - Cambridge
+- Roll Number
+- Year of Passing
+- Percentage
+- CGPA
+- Medium of Instruction
+
+CLASS 12 DETAILS
+- School Name
+- School Board
+- Stream
+  Examples:
+  - PCM
+  - PCB
+  - Commerce
+  - Humanities
+- Subjects
+- Roll Number
+- Year of Passing
+- Percentage
+- CGPA
+- PCM Percentage
+- PCB Percentage
+- Medium of Instruction
+
+DROPPER STATUS
+- Appearing Candidate
+- Passed Candidate
+- Gap Year Information
+
+DIPLOMA / GRADUATION DETAILS (if applicable)
+- Institution Name
+- Course Name
+- University Name
+- Percentage / CGPA
+- Passing Year
+
+
+
+-----------------------------------
+SECTION 3 — ENTRANCE EXAMS
+-----------------------------------
+
+Students only fill relevant exams.
+
+Supported Exams:
+- JEE Main
+- JEE Advanced
+- NEET
+- CUET
+- CLAT
+- CAT
+- SAT
+- ACT
+- NATA
+- COMEDK
+- VITEEE
+- SRMJEEE
+- MET
+- BITSAT
+
+Exam Information:
+- Exam Name
+- Roll Number
+- Score
+- Rank
+- Percentile
+- Attempt Year
+
+
+
+-----------------------------------
+SECTION 4 — DOCUMENT UPLOADS
+-----------------------------------
+
+Students upload documents once.
+
+Required Documents:
+- Passport Size Photograph
+- Signature
+- Class 10 Marksheet
+- Class 12 Marksheet
+- Government ID Proof
+
+Optional Documents:
+- Category Certificate
+- Income Certificate
+- Domicile Certificate
+- Migration Certificate
+- Transfer Certificate
+- Character Certificate
+- Disability Certificate
+- Passport
+- Entrance Exam Scorecard
+
+Future Feature:
+OCR-based automatic data extraction from uploaded documents.
+
+
+
+-----------------------------------
+SECTION 5 — PREFERENCES
+-----------------------------------
+
+- Preferred Courses
+- Preferred States
+- Preferred Cities
+- Budget Range
+- Hostel Requirement
+- Preferred University Type
+  - Private
+  - Government
+  - Deemed
+- Placement Preference
+- Scholarship Preference
+
+
+
+-----------------------------------
+UNIVERSITY DISCOVERY SYSTEM
+-----------------------------------
+
+Students can discover universities based on:
+- Eligibility
+- Entrance Exams
+- Fees
+- Placements
+- Location
+- Courses
+- Deadlines
+
+Filters:
+- Stream
+- Budget
+- State
+- Course
+- Hostel
+- Entrance Exam Accepted
+
+
+
+-----------------------------------
+APPLICATION DASHBOARD
+-----------------------------------
+
+Dashboard Sections:
+- My Profile
+- Discover Universities
+- Saved Universities
+- Applied Universities
+- Documents
+- Notifications
+
+Application Status Types:
+- Draft
+- Incomplete
+- Submitted
+- Under Review
+- Accepted
+- Rejected
+
+
+
+-----------------------------------
+UNIVERSITY REQUIREMENT ENGINE
+-----------------------------------
+
+Each university may require:
+- Different eligibility rules
+- Different documents
+- Additional forms
+- Additional declarations
+
+UniSimplify dynamically maps student profile data to university-specific requirements.
+
+
+
+-----------------------------------
+UNIVERSITY SIDE FEATURES
+-----------------------------------
+
+Universities receive:
+- Standardized applications
+- Student documents
+- Filtered applicant data
+- Downloadable exports
+- Admission dashboards
+
+Possible Features:
+- Applicant Filters
+- CSV Export
+- PDF Export
+- Deadline Management
+- Student Communication
+
+
+
+-----------------------------------
+TECHNICAL FOUNDATION
+-----------------------------------
+
+Core Components:
+- Universal Student Schema
+- University Requirement Database
+- Eligibility Engine
+- Document Management System
+- Application Tracking System
+
+Suggested Stack:
+- Next.js
+- Supabase / Firebase
+- PostgreSQL
+- Cloud Storage
+- OCR APIs
+
+
+
+-----------------------------------
+FUTURE FEATURES
+-----------------------------------
+
+- DigiLocker Integration
+- AI-based college recommendations
+- Automatic eligibility checks
+- Application reminders
+- WhatsApp notifications
+- Scholarship matching
+- AI-powered autofill
+- Deadline tracking
+- Student analytics
+- University API integrations
+
+
+
+-----------------------------------
+MISSION
+-----------------------------------
+
+UniSimplify aims to become the standardized application infrastructure for Indian higher education by making college applications simpler, faster, and more accessible for every student.
+
+"One Profile. Multiple Universities. Zero Repetition."
+```
