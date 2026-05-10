@@ -18,7 +18,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" data-scroll-behavior="smooth">
-      <body className={inter.className}>
+      <body className={inter.className} suppressHydrationWarning>
         <StyledJsxRegistry>
           <div className="grid-bg" />
           <div className="radial-glow" aria-hidden />
