@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase';
-import { User, Lock, Bell, Shield, Save } from 'lucide-react';
+import { User, Lock, Bell, Shield, Save, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function SettingsPage() {
@@ -63,9 +63,14 @@ export default function SettingsPage() {
     }
   };
 
+  const handleSignOut = async () => {
+    await supabase.auth.signOut();
+    router.push('/');
+  };
+
   if (loading) {
     return (
-      <div className="loading-screen" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="loading-screen">
         <div className="loader"></div>
       </div>
     );
@@ -73,16 +78,16 @@ export default function SettingsPage() {
 
   return (
     <main className="portal-main">
-      <header className="main-header-banner" style={{ padding: '2.5rem 3rem' }}>
+      <header className="main-header-banner">
         <div className="banner-content">
           <div className="banner-text">
             <h1>Settings</h1>
-            <p style={{ color: '#64748b', marginTop: '0.5rem' }}>Manage your account, privacy, and preferences.</p>
+            <p className="banner-subtext">Manage your account, privacy, and preferences.</p>
           </div>
           <button 
             onClick={handleSave} 
             disabled={saving}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#10b981', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: '8px', border: 'none', fontWeight: '600', cursor: 'pointer' }}
+            className="btn-save-progress"
           >
             <Save size={18} />
             {saving ? 'Saving...' : 'Save Changes'}
@@ -90,134 +95,138 @@ export default function SettingsPage() {
         </div>
       </header>
 
-      <div className="dashboard-content-area" style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
+      <div className="dashboard-content-area portal-grid">
         {/* Settings Sidebar */}
-        <div style={{ width: '240px', display: 'flex', flexDirection: 'column', gap: '0.5rem', background: '#fff', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+        <div className="tabs-sidebar glass-panel">
           <button
             onClick={() => setActiveTab('account')}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: activeTab === 'account' ? '#f8fafc' : 'transparent', color: activeTab === 'account' ? '#0f172a' : '#64748b', border: 'none', borderRadius: '8px', cursor: 'pointer', textAlign: 'left', fontWeight: '600', width: '100%' }}
+            className={`tab-btn ${activeTab === 'account' ? 'active' : ''}`}
           >
             <User size={18} /> Account
           </button>
           <button
             onClick={() => setActiveTab('security')}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: activeTab === 'security' ? '#f8fafc' : 'transparent', color: activeTab === 'security' ? '#0f172a' : '#64748b', border: 'none', borderRadius: '8px', cursor: 'pointer', textAlign: 'left', fontWeight: '600', width: '100%' }}
+            className={`tab-btn ${activeTab === 'security' ? 'active' : ''}`}
           >
             <Lock size={18} /> Security
           </button>
           <button
             onClick={() => setActiveTab('notifications')}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem', background: activeTab === 'notifications' ? '#f8fafc' : 'transparent', color: activeTab === 'notifications' ? '#0f172a' : '#64748b', border: 'none', borderRadius: '8px', cursor: 'pointer', textAlign: 'left', fontWeight: '600', width: '100%' }}
+            className={`tab-btn ${activeTab === 'notifications' ? 'active' : ''}`}
           >
             <Bell size={18} /> Notifications
           </button>
         </div>
 
         {/* Settings Content */}
-        <div style={{ flex: 1, background: '#fff', padding: '2rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+        <div className="form-content-card glass-panel">
           
           {activeTab === 'account' && (
-            <div>
-              <h2 style={{ marginBottom: '1.5rem', color: '#0f172a' }}>Account Settings</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
+            <div className="form-section">
+              <div className="section-title-box">
+                <User size={24} className="text-emerald" />
+                <h2>Account Settings</h2>
+              </div>
+              
+              <div className="form-grid-standard">
                 <div className="form-group">
-                  <label htmlFor="fullName" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Full Name</label>
+                  <label>Full Name</label>
                   <input 
-                    id="fullName"
-                    name="fullName"
                     type="text" 
                     value={formData.fullName}
                     onChange={(e) => setFormData({...formData, fullName: e.target.value})}
-                    style={{ width: '100%', maxWidth: '400px', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
                   />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="email" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Email Address</label>
+                  <label>Email Address</label>
                   <input 
-                    id="email"
-                    name="email"
                     type="email" 
                     value={formData.email}
                     disabled
-                    style={{ width: '100%', maxWidth: '400px', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px', background: '#f1f5f9', color: '#94a3b8' }}
+                    className="disabled-input"
                   />
-                  <p style={{ fontSize: '0.8rem', color: '#64748b', marginTop: '0.5rem' }}>Email cannot be changed directly. Contact support if needed.</p>
+                  <span className="input-hint">Email cannot be changed directly. Contact support if needed.</span>
                 </div>
               </div>
             </div>
           )}
 
           {activeTab === 'security' && (
-            <div>
-              <h2 style={{ marginBottom: '1.5rem', color: '#0f172a' }}>Security</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                <div style={{ border: '1px solid #e2e8f0', borderRadius: '8px', padding: '1.5rem' }}>
-                  <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '1rem' }}>
-                    <Shield size={24} color="#10b981" />
-                    <div>
-                      <h3 style={{ fontSize: '1.1rem', color: '#0f172a' }}>Password</h3>
-                      <p style={{ fontSize: '0.85rem', color: '#64748b' }}>A secure password helps protect your application data.</p>
-                    </div>
+            <div className="form-section">
+              <div className="section-title-box">
+                <Lock size={24} className="text-emerald" />
+                <h2>Security</h2>
+              </div>
+              
+              <div className="security-card-premium">
+                <div className="security-info">
+                  <Shield size={32} className="text-emerald" />
+                  <div>
+                    <h3>Password</h3>
+                    <p>A secure password helps protect your application data.</p>
                   </div>
-                  <button 
-                    onClick={handlePasswordReset}
-                    style={{ background: '#f8fafc', border: '1px solid #cbd5e1', padding: '0.5rem 1rem', borderRadius: '6px', fontWeight: '600', cursor: 'pointer', color: '#0f172a' }}
-                  >
-                    Send Password Reset Email
-                  </button>
                 </div>
+                <button 
+                  onClick={handlePasswordReset}
+                  className="btn-outline-premium"
+                >
+                  Send Password Reset Email
+                </button>
               </div>
             </div>
           )}
 
           {activeTab === 'notifications' && (
-            <div>
-              <h2 style={{ marginBottom: '1.5rem', color: '#0f172a' }}>Notification Preferences</h2>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-                
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px solid #e2e8f0' }}>
-                  <div>
-                    <h4 style={{ fontWeight: '600', color: '#0f172a' }}>Application Deadlines</h4>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b' }}>Receive alerts when a saved college deadline is approaching.</p>
+            <div className="form-section">
+              <div className="section-title-box">
+                <Bell size={24} className="text-emerald" />
+                <h2>Notification Preferences</h2>
+              </div>
+              
+              <div className="notification-list-premium">
+                <div className="notif-item">
+                  <div className="notif-text">
+                    <h4>Application Deadlines</h4>
+                    <p>Receive alerts when a saved college deadline is approaching.</p>
                   </div>
-                  <label htmlFor="deadlineReminders" className="switch" style={{ position: 'relative', display: 'inline-block', width: '40px', height: '24px' }}>
+                  <label className="premium-toggle">
                     <input 
-                      id="deadlineReminders"
-                      name="deadlineReminders"
                       type="checkbox" 
                       checked={formData.notifications.deadlineReminders}
                       onChange={(e) => setFormData({...formData, notifications: {...formData.notifications, deadlineReminders: e.target.checked}})}
-                      style={{ opacity: 0, width: 0, height: 0 }} 
                     />
-                    <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: formData.notifications.deadlineReminders ? '#10b981' : '#cbd5e1', transition: '.4s', borderRadius: '24px' }}>
-                      <span style={{ position: 'absolute', height: '18px', width: '18px', left: formData.notifications.deadlineReminders ? '18px' : '3px', bottom: '3px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%' }}></span>
-                    </span>
+                    <span className="toggle-slider"></span>
                   </label>
                 </div>
 
-                <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', paddingBottom: '1rem', borderBottom: '1px solid #e2e8f0' }}>
-                  <div>
-                    <h4 style={{ fontWeight: '600', color: '#0f172a' }}>Email Alerts</h4>
-                    <p style={{ fontSize: '0.85rem', color: '#64748b' }}>Receive important updates regarding UniSimplify platform.</p>
+                <div className="notif-item">
+                  <div className="notif-text">
+                    <h4>Email Alerts</h4>
+                    <p>Receive important updates regarding UniSimplify platform.</p>
                   </div>
-                  <label htmlFor="emailAlerts" className="switch" style={{ position: 'relative', display: 'inline-block', width: '40px', height: '24px' }}>
+                  <label className="premium-toggle">
                     <input 
-                      id="emailAlerts"
-                      name="emailAlerts"
                       type="checkbox" 
                       checked={formData.notifications.emailAlerts}
                       onChange={(e) => setFormData({...formData, notifications: {...formData.notifications, emailAlerts: e.target.checked}})}
-                      style={{ opacity: 0, width: 0, height: 0 }} 
                     />
-                    <span style={{ position: 'absolute', cursor: 'pointer', top: 0, left: 0, right: 0, bottom: 0, backgroundColor: formData.notifications.emailAlerts ? '#10b981' : '#cbd5e1', transition: '.4s', borderRadius: '24px' }}>
-                      <span style={{ position: 'absolute', height: '18px', width: '18px', left: formData.notifications.emailAlerts ? '18px' : '3px', bottom: '3px', backgroundColor: 'white', transition: '.4s', borderRadius: '50%' }}></span>
-                    </span>
+                    <span className="toggle-slider"></span>
                   </label>
                 </div>
-
               </div>
             </div>
           )}
+
+          <div className="divider-premium" />
+          
+          <div className="form-section danger-zone">
+            <h3>Danger Zone</h3>
+            <p>Actions that are permanent or sign you out of the platform.</p>
+            <button onClick={handleSignOut} className="btn-logout-mobile">
+              <LogOut size={20} />
+              Sign Out from All Devices
+            </button>
+          </div>
 
         </div>
       </div>

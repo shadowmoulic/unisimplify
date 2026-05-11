@@ -7,7 +7,10 @@ import {
   Building2, 
   Search, 
   Settings, 
-  LogOut 
+  LogOut,
+  Menu,
+  X,
+  User
 } from 'lucide-react';
 import Link from 'next/link';
 import { usePathname, useRouter } from 'next/navigation';
@@ -23,6 +26,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
     const checkUser = async () => {
@@ -36,6 +40,11 @@ export default function DashboardLayout({
     };
     checkUser();
   }, [router]);
+
+  useEffect(() => {
+    // Close sidebar on route change
+    setIsSidebarOpen(false);
+  }, [pathname]);
 
   const handleSignOut = async () => {
     await supabase.auth.signOut();
@@ -54,8 +63,8 @@ export default function DashboardLayout({
 
   return (
     <div className="portal-layout">
-      {/* LEFT SIDEBAR */}
-      <aside className="portal-sidebar">
+      {/* LEFT SIDEBAR (Desktop Only) */}
+      <aside className="portal-sidebar desktop-only">
         <div className="sidebar-brand">
           <div className="brand-icon">
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
@@ -113,6 +122,36 @@ export default function DashboardLayout({
           </div>
         </div>
       </aside>
+
+      {/* MOBILE BOTTOM NAV */}
+      <nav className="mobile-bottom-nav">
+        <Link href="/dashboard" className={`mobile-nav-item ${pathname === '/dashboard' ? 'active' : ''}`}>
+          <Home size={22} />
+          <span>Home</span>
+        </Link>
+        <Link href="/discover" className={`mobile-nav-item ${pathname === '/discover' ? 'active' : ''}`}>
+          <Search size={22} />
+          <span>Search</span>
+        </Link>
+        <Link href="/dashboard/common-app" className={`mobile-nav-item ${pathname === '/dashboard/common-app' ? 'active' : ''}`}>
+          <FileText size={22} />
+          <span>App</span>
+        </Link>
+        <Link href="/dashboard/colleges" className={`mobile-nav-item ${pathname === '/dashboard/colleges' ? 'active' : ''}`}>
+          <Building2 size={22} />
+          <span>Colleges</span>
+        </Link>
+        <Link href="/dashboard/settings" className={`mobile-nav-item ${pathname === '/dashboard/settings' ? 'active' : ''}`}>
+          <Settings size={22} />
+          <span>Settings</span>
+        </Link>
+      </nav>
+
+      {/* SIDEBAR OVERLAY */}
+      <div 
+        className={`sidebar-overlay ${isSidebarOpen ? 'active' : ''}`}
+        onClick={() => setIsSidebarOpen(false)}
+      />
 
       {/* MAIN CONTENT */}
       {children}

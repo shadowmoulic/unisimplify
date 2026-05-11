@@ -1,7 +1,20 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { User, GraduationCap, FileText, ShieldCheck, Settings, Save } from 'lucide-react';
+import { 
+  User, 
+  GraduationCap, 
+  FileText, 
+  ShieldCheck, 
+  Settings, 
+  Save, 
+  Plus, 
+  Trash2, 
+  AlertCircle,
+  Stethoscope,
+  MapPin,
+  Users2
+} from 'lucide-react';
 import { supabase } from '@/utils/supabase';
 import { useRouter } from 'next/navigation';
 
@@ -13,12 +26,68 @@ export default function CommonAppPage() {
 
   // Form State
   const [formData, setFormData] = useState({
-    personal: { firstName: '', lastName: '', dob: '', phone: '' },
-    academic: { schoolBoard: '', percentage10: '', percentage12: '', stream: '' },
+    personal: { 
+      firstName: '', 
+      lastName: '', 
+      dob: '', 
+      phone: '',
+      caste: 'General',
+      categoryCertUrl: '',
+      minorityStatus: 'No',
+      isDiabetic: 'No',
+      birthPlace: '',
+      isTwin: 'No'
+    },
+    academic: { 
+      schoolBoard: '', 
+      percentage10: 85, 
+      percentage12: 85, 
+      stream: '',
+      subjects12: [
+        { name: 'Physics', marks: '' },
+        { name: 'Chemistry', marks: '' },
+        { name: 'Mathematics', marks: '' },
+        { name: 'English', marks: '' },
+        { name: '', marks: '' }
+      ]
+    },
     exams: { jeeMainScore: '', neetScore: '', cuetScore: '' },
     documents: { idProofUrl: '', photoUrl: '' },
     preferences: { preferredCourse: '', preferredState: '', budget: '' }
   });
+
+  const indianBoards = [
+    "CBSE (Central Board of Secondary Education)",
+    "ICSE (Indian Certificate of Secondary Education)",
+    "NIOS (National Institute of Open Schooling)",
+    "Andhra Pradesh State Board",
+    "Assam State Board",
+    "Bihar State Board",
+    "Chhattisgarh State Board",
+    "Goa State Board",
+    "Gujarat State Board",
+    "Haryana State Board",
+    "Himachal Pradesh State Board",
+    "Jammu & Kashmir State Board",
+    "Jharkhand State Board",
+    "Karnataka State Board",
+    "Kerala State Board",
+    "Madhya Pradesh State Board",
+    "Maharashtra State Board",
+    "Manipur State Board",
+    "Meghalaya State Board",
+    "Mizoram State Board",
+    "Nagaland State Board",
+    "Odisha State Board",
+    "Punjab State Board",
+    "Rajasthan State Board",
+    "Tamil Nadu State Board",
+    "Telangana State Board",
+    "Tripura State Board",
+    "Uttar Pradesh State Board",
+    "Uttarakhand State Board",
+    "West Bengal State Board"
+  ];
 
   useEffect(() => {
     const fetchUserAndProfile = async () => {
@@ -28,15 +97,11 @@ export default function CommonAppPage() {
         return;
       }
       setUser(session.user);
-      
-      // Try to load existing profile data here (placeholder for now)
-      // const { data } = await supabase.from('profiles').select('*').eq('id', session.user.id).single();
-      // if (data) setFormData(data.content);
     };
     fetchUserAndProfile();
   }, [router]);
 
-  const handleInputChange = (section: string, field: string, value: string) => {
+  const handleInputChange = (section: string, field: string, value: any) => {
     setFormData(prev => ({
       ...prev,
       [section]: {
@@ -46,11 +111,35 @@ export default function CommonAppPage() {
     }));
   };
 
+  const handleSubjectChange = (index: number, field: string, value: string) => {
+    const newSubjects = [...formData.academic.subjects12];
+    (newSubjects[index] as any)[field] = value;
+    setFormData(prev => ({
+      ...prev,
+      academic: { ...prev.academic, subjects12: newSubjects }
+    }));
+  };
+
+  const addSubject = () => {
+    setFormData(prev => ({
+      ...prev,
+      academic: { 
+        ...prev.academic, 
+        subjects12: [...prev.academic.subjects12, { name: '', marks: '' }] 
+      }
+    }));
+  };
+
+  const removeSubject = (index: number) => {
+    const newSubjects = formData.academic.subjects12.filter((_, i) => i !== index);
+    setFormData(prev => ({
+      ...prev,
+      academic: { ...prev.academic, subjects12: newSubjects }
+    }));
+  };
+
   const handleSave = async () => {
     setLoading(true);
-    // Placeholder for actual save logic
-    // await supabase.from('profiles').upsert({ id: user?.id, content: formData });
-    
     setTimeout(() => {
       setLoading(false);
       alert('Application progress saved successfully!');
@@ -67,16 +156,16 @@ export default function CommonAppPage() {
 
   return (
     <main className="portal-main">
-      <header className="main-header-banner" style={{ padding: '2rem 3rem' }}>
+      <header className="main-header-banner">
         <div className="banner-content">
           <div className="banner-text">
             <h1>My UniSimplify Application</h1>
-            <p style={{ color: '#64748b', marginTop: '0.5rem' }}>Fill once, apply everywhere. Your progress is auto-saved.</p>
+            <p className="banner-subtext">Fill once, apply everywhere. Your progress is auto-saved.</p>
           </div>
           <button 
             onClick={handleSave} 
             disabled={loading}
-            style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', background: '#10b981', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: '8px', border: 'none', fontWeight: '600', cursor: 'pointer' }}
+            className="btn-save-progress"
           >
             <Save size={18} />
             {loading ? 'Saving...' : 'Save Progress'}
@@ -84,20 +173,13 @@ export default function CommonAppPage() {
         </div>
       </header>
 
-      <div className="dashboard-content-area" style={{ display: 'flex', gap: '2rem', alignItems: 'flex-start' }}>
-        {/* Tab Navigation */}
-        <div style={{ width: '240px', display: 'flex', flexDirection: 'column', gap: '0.5rem', background: '#fff', padding: '1rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+      <div className="dashboard-content-area portal-grid">
+        <div className="tabs-sidebar glass-panel">
           {tabs.map(tab => (
             <button
               key={tab.id}
               onClick={() => setActiveTab(tab.id)}
-              style={{
-                display: 'flex', alignItems: 'center', gap: '0.75rem', padding: '0.75rem 1rem',
-                background: activeTab === tab.id ? '#ecfdf5' : 'transparent',
-                color: activeTab === tab.id ? '#10b981' : '#64748b',
-                border: activeTab === tab.id ? '1px solid rgba(16,185,129,0.2)' : '1px solid transparent',
-                borderRadius: '8px', cursor: 'pointer', textAlign: 'left', fontWeight: '600', width: '100%'
-              }}
+              className={`tab-btn ${activeTab === tab.id ? 'active' : ''}`}
             >
               {tab.icon}
               {tab.label}
@@ -105,59 +187,86 @@ export default function CommonAppPage() {
           ))}
         </div>
 
-        {/* Form Content Area */}
-        <div style={{ flex: 1, background: '#fff', padding: '2rem', borderRadius: '12px', border: '1px solid #e2e8f0' }}>
+        <div className="form-content-card glass-panel">
           
           {activeTab === 'personal' && (
             <div className="form-section">
-              <h2 style={{ marginBottom: '1.5rem', color: '#0f172a' }}>Personal Details</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
+              <div className="section-title-box">
+                <User className="text-emerald" size={24} />
+                <h2>Personal Information</h2>
+              </div>
+              
+              <div className="form-grid-standard">
                 <div className="form-group">
-                  <label htmlFor="firstName" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>First Name</label>
-                  <input 
-                    id="firstName"
-                    name="firstName"
-                    type="text" 
-                    value={formData.personal.firstName}
-                    onChange={(e) => handleInputChange('personal', 'firstName', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="e.g. Rahul"
-                  />
+                  <label>First Name</label>
+                  <input type="text" value={formData.personal.firstName} onChange={(e) => handleInputChange('personal', 'firstName', e.target.value)} placeholder="Rahul" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="lastName" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Last Name</label>
-                  <input 
-                    id="lastName"
-                    name="lastName"
-                    type="text" 
-                    value={formData.personal.lastName}
-                    onChange={(e) => handleInputChange('personal', 'lastName', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="e.g. Sharma"
-                  />
+                  <label>Last Name</label>
+                  <input type="text" value={formData.personal.lastName} onChange={(e) => handleInputChange('personal', 'lastName', e.target.value)} placeholder="Sharma" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="dob" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Date of Birth</label>
-                  <input 
-                    id="dob"
-                    name="dob"
-                    type="date" 
-                    value={formData.personal.dob}
-                    onChange={(e) => handleInputChange('personal', 'dob', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                  />
+                  <label>Date of Birth</label>
+                  <input type="date" value={formData.personal.dob} onChange={(e) => handleInputChange('personal', 'dob', e.target.value)} />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="phone" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Phone Number</label>
-                  <input 
-                    id="phone"
-                    name="phone"
-                    type="tel" 
-                    value={formData.personal.phone}
-                    onChange={(e) => handleInputChange('personal', 'phone', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="+91"
-                  />
+                  <label>Phone Number</label>
+                  <input type="tel" value={formData.personal.phone} onChange={(e) => handleInputChange('personal', 'phone', e.target.value)} placeholder="+91" />
+                </div>
+                <div className="form-group">
+                  <label><MapPin size={14} /> Place of Birth</label>
+                  <input type="text" value={formData.personal.birthPlace} onChange={(e) => handleInputChange('personal', 'birthPlace', e.target.value)} placeholder="e.g. Mumbai, Maharashtra" />
+                </div>
+                <div className="form-group">
+                  <label><Users2 size={14} /> Are you a Twin?</label>
+                  <select value={formData.personal.isTwin} onChange={(e) => handleInputChange('personal', 'isTwin', e.target.value)}>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
+                </div>
+              </div>
+
+              <div className="divider-premium" />
+
+              <div className="section-title-box-mini">
+                <AlertCircle size={18} />
+                <h3>Category & Diversity</h3>
+              </div>
+
+              <div className="form-grid-standard">
+                <div className="form-group">
+                  <label>Social Category / Caste</label>
+                  <select value={formData.personal.caste} onChange={(e) => handleInputChange('personal', 'caste', e.target.value)}>
+                    <option value="General">General (UR)</option>
+                    <option value="OBC-NCL">OBC-NCL</option>
+                    <option value="SC">SC</option>
+                    <option value="ST">ST</option>
+                    <option value="EWS">EWS</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label>Category Certificate (Optional)</label>
+                  <input type="file" accept=".pdf,.jpg" onChange={(e) => handleInputChange('personal', 'categoryCertUrl', e.target.files?.[0]?.name || '')} />
+                  <span className="input-hint">Upload proof if belonging to reserved category</span>
+                </div>
+                <div className="form-group">
+                  <label>Minority Status</label>
+                  <select value={formData.personal.minorityStatus} onChange={(e) => handleInputChange('personal', 'minorityStatus', e.target.value)}>
+                    <option value="No">No</option>
+                    <option value="Muslim">Religious - Muslim</option>
+                    <option value="Christian">Religious - Christian</option>
+                    <option value="Sikh">Religious - Sikh</option>
+                    <option value="Jain">Religious - Jain</option>
+                    <option value="Buddhist">Religious - Buddhist</option>
+                    <option value="Linguistic">Linguistic Minority</option>
+                  </select>
+                </div>
+                <div className="form-group">
+                  <label><Stethoscope size={14} /> Are you Diabetic?</label>
+                  <select value={formData.personal.isDiabetic} onChange={(e) => handleInputChange('personal', 'isDiabetic', e.target.value)}>
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select>
                 </div>
               </div>
             </div>
@@ -165,91 +274,105 @@ export default function CommonAppPage() {
 
           {activeTab === 'academic' && (
             <div className="form-section">
-              <h2 style={{ marginBottom: '1.5rem', color: '#0f172a' }}>Academic Details</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '1.5rem' }}>
-                <div className="form-group" style={{ gridColumn: '1 / -1' }}>
-                  <label htmlFor="schoolBoard" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>School Board (Class 12)</label>
-                  <select 
-                    id="schoolBoard"
-                    name="schoolBoard"
-                    value={formData.academic.schoolBoard}
-                    onChange={(e) => handleInputChange('academic', 'schoolBoard', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                  >
-                    <option value="">Select Board</option>
-                    <option value="CBSE">CBSE</option>
-                    <option value="ICSE">ICSE</option>
-                    <option value="State Board">State Board</option>
-                  </select>
-                </div>
-                <div className="form-group">
-                  <label htmlFor="percentage10" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Class 10 Percentage</label>
+              <div className="section-title-box">
+                <GraduationCap className="text-emerald" size={24} />
+                <h2>Academic Credentials</h2>
+              </div>
+
+              <div className="form-group full-width">
+                <label>School Board (Class 12)</label>
+                <select 
+                  value={formData.academic.schoolBoard} 
+                  onChange={(e) => handleInputChange('academic', 'schoolBoard', e.target.value)}
+                  className="premium-select"
+                >
+                  <option value="">Select your board</option>
+                  {indianBoards.map(board => <option key={board} value={board}>{board}</option>)}
+                </select>
+              </div>
+
+              <div className="slider-group-container">
+                <div className="slider-item">
+                  <div className="slider-label">
+                    <span>Class 10 Percentage</span>
+                    <strong className="text-emerald">{formData.academic.percentage10}%</strong>
+                  </div>
                   <input 
-                    id="percentage10"
-                    name="percentage10"
-                    type="number" 
-                    value={formData.academic.percentage10}
-                    onChange={(e) => handleInputChange('academic', 'percentage10', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="%"
+                    type="range" min="0" max="100" 
+                    value={formData.academic.percentage10} 
+                    onChange={(e) => handleInputChange('academic', 'percentage10', parseInt(e.target.value))}
+                    className="premium-slider"
                   />
                 </div>
-                <div className="form-group">
-                  <label htmlFor="percentage12" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Class 12 Percentage (Expected/Actual)</label>
+
+                <div className="slider-item">
+                  <div className="slider-label">
+                    <span>Class 12 Percentage (Expected/Actual)</span>
+                    <strong className="text-emerald">{formData.academic.percentage12}%</strong>
+                  </div>
                   <input 
-                    id="percentage12"
-                    name="percentage12"
-                    type="number" 
-                    value={formData.academic.percentage12}
-                    onChange={(e) => handleInputChange('academic', 'percentage12', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="%"
+                    type="range" min="0" max="100" 
+                    value={formData.academic.percentage12} 
+                    onChange={(e) => handleInputChange('academic', 'percentage12', parseInt(e.target.value))}
+                    className="premium-slider"
                   />
                 </div>
+              </div>
+
+              <div className="divider-premium" />
+
+              <div className="section-title-box-mini">
+                <FileText size={18} />
+                <h3>Class 12th Subjects & Marks</h3>
+              </div>
+
+              <div className="subjects-grid-premium">
+                <div className="grid-header">
+                  <span>Subject Name</span>
+                  <span>Marks (out of 100)</span>
+                  <span />
+                </div>
+                {formData.academic.subjects12.map((subject, index) => (
+                  <div key={index} className="subject-row">
+                    <input 
+                      type="text" value={subject.name} 
+                      onChange={(e) => handleSubjectChange(index, 'name', e.target.value)}
+                      placeholder="e.g. Physics" 
+                    />
+                    <input 
+                      type="number" value={subject.marks} 
+                      onChange={(e) => handleSubjectChange(index, 'marks', e.target.value)}
+                      placeholder="95" 
+                    />
+                    <button onClick={() => removeSubject(index)} className="btn-remove"><Trash2 size={16} /></button>
+                  </div>
+                ))}
+                <button onClick={addSubject} className="btn-add-subject">
+                  <Plus size={16} />
+                  Add Another Subject
+                </button>
               </div>
             </div>
           )}
 
           {activeTab === 'exams' && (
             <div className="form-section">
-              <h2 style={{ marginBottom: '1.5rem', color: '#0f172a' }}>Entrance Exams</h2>
-              <p style={{ marginBottom: '1.5rem', color: '#64748b' }}>Enter your scores or expected scores for the relevant exams.</p>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+              <div className="section-title-box">
+                <FileText className="text-emerald" size={24} />
+                <h2>Entrance Exams</h2>
+              </div>
+              <div className="form-grid-standard">
                 <div className="form-group">
-                  <label htmlFor="jeeMainScore" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>JEE Main Score / Percentile</label>
-                  <input 
-                    id="jeeMainScore"
-                    name="jeeMainScore"
-                    type="text" 
-                    value={formData.exams.jeeMainScore}
-                    onChange={(e) => handleInputChange('exams', 'jeeMainScore', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="e.g. 98.5"
-                  />
+                  <label>JEE Main Percentile</label>
+                  <input type="text" value={formData.exams.jeeMainScore} onChange={(e) => handleInputChange('exams', 'jeeMainScore', e.target.value)} placeholder="98.5" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="neetScore" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>NEET Score</label>
-                  <input 
-                    id="neetScore"
-                    name="neetScore"
-                    type="text" 
-                    value={formData.exams.neetScore}
-                    onChange={(e) => handleInputChange('exams', 'neetScore', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="e.g. 650"
-                  />
+                  <label>NEET Score</label>
+                  <input type="text" value={formData.exams.neetScore} onChange={(e) => handleInputChange('exams', 'neetScore', e.target.value)} placeholder="650" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="cuetScore" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>CUET Score</label>
-                  <input 
-                    id="cuetScore"
-                    name="cuetScore"
-                    type="text" 
-                    value={formData.exams.cuetScore}
-                    onChange={(e) => handleInputChange('exams', 'cuetScore', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="e.g. 780"
-                  />
+                  <label>CUET Score</label>
+                  <input type="text" value={formData.exams.cuetScore} onChange={(e) => handleInputChange('exams', 'cuetScore', e.target.value)} placeholder="780" />
                 </div>
               </div>
             </div>
@@ -257,87 +380,49 @@ export default function CommonAppPage() {
 
           {activeTab === 'documents' && (
             <div className="form-section">
-              <h2 style={{ marginBottom: '1.5rem', color: '#0f172a' }}>Documents</h2>
-              <p style={{ marginBottom: '1.5rem', color: '#64748b' }}>Upload your supporting documents. These will be sent securely to your selected colleges.</p>
-              
-              <div style={{ border: '2px dashed #cbd5e1', padding: '2rem', textAlign: 'center', borderRadius: '8px', marginBottom: '1rem' }}>
-                <ShieldCheck size={32} color="#94a3b8" style={{ marginBottom: '1rem' }} />
-                <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Upload ID Proof (Aadhaar/Passport)</h3>
-                <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1rem' }}>PDF or JPEG up to 5MB</p>
-                <input 
-                  type="file" 
-                  accept=".pdf,.jpg,.jpeg"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      handleInputChange('documents', 'idProofUrl', e.target.files[0].name);
-                    }
-                  }}
-                  style={{ display: 'block', margin: '0 auto' }} 
-                />
-                {formData.documents.idProofUrl && <p style={{ fontSize: '0.85rem', color: '#10b981', marginTop: '0.5rem' }}>Selected: {formData.documents.idProofUrl}</p>}
+              <div className="section-title-box">
+                <ShieldCheck className="text-emerald" size={24} />
+                <h2>Verified Documents</h2>
               </div>
-              
-              <div style={{ border: '2px dashed #cbd5e1', padding: '2rem', textAlign: 'center', borderRadius: '8px' }}>
-                <User size={32} color="#94a3b8" style={{ marginBottom: '1rem' }} />
-                <h3 style={{ fontSize: '1.1rem', marginBottom: '0.5rem' }}>Upload Passport Photograph</h3>
-                <p style={{ fontSize: '0.85rem', color: '#64748b', marginBottom: '1rem' }}>JPEG up to 2MB</p>
-                <input 
-                  type="file" 
-                  accept=".jpg,.jpeg"
-                  onChange={(e) => {
-                    if (e.target.files && e.target.files[0]) {
-                      handleInputChange('documents', 'photoUrl', e.target.files[0].name);
-                    }
-                  }}
-                  style={{ display: 'block', margin: '0 auto' }} 
-                />
-                {formData.documents.photoUrl && <p style={{ fontSize: '0.85rem', color: '#10b981', marginTop: '0.5rem' }}>Selected: {formData.documents.photoUrl}</p>}
+              <div className="upload-grid-premium">
+                <div className="upload-box-premium">
+                  <FileText size={32} />
+                  <h3>ID Proof</h3>
+                  <p>Aadhaar, PAN, or Passport</p>
+                  <input type="file" onChange={(e) => handleInputChange('documents', 'idProofUrl', e.target.files?.[0]?.name || '')} />
+                </div>
+                <div className="upload-box-premium">
+                  <User size={32} />
+                  <h3>Photograph</h3>
+                  <p>Recent passport size photo</p>
+                  <input type="file" onChange={(e) => handleInputChange('documents', 'photoUrl', e.target.files?.[0]?.name || '')} />
+                </div>
               </div>
             </div>
           )}
 
           {activeTab === 'preferences' && (
             <div className="form-section">
-              <h2 style={{ marginBottom: '1.5rem', color: '#0f172a' }}>College Preferences</h2>
-              <div style={{ display: 'grid', gridTemplateColumns: '1fr', gap: '1.5rem' }}>
+              <div className="section-title-box">
+                <Settings className="text-emerald" size={24} />
+                <h2>College Preferences</h2>
+              </div>
+              <div className="form-grid-standard">
                 <div className="form-group">
-                  <label htmlFor="preferredCourse" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Preferred Course/Major</label>
-                  <input 
-                    id="preferredCourse"
-                    name="preferredCourse"
-                    type="text" 
-                    value={formData.preferences.preferredCourse}
-                    onChange={(e) => handleInputChange('preferences', 'preferredCourse', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="e.g. B.Tech Computer Science"
-                  />
+                  <label>Preferred Course</label>
+                  <input type="text" value={formData.preferences.preferredCourse} onChange={(e) => handleInputChange('preferences', 'preferredCourse', e.target.value)} placeholder="B.Tech CS" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="preferredState" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Preferred State/Location</label>
-                  <input 
-                    id="preferredState"
-                    name="preferredState"
-                    type="text" 
-                    value={formData.preferences.preferredState}
-                    onChange={(e) => handleInputChange('preferences', 'preferredState', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                    placeholder="e.g. Maharashtra, Karnataka"
-                  />
+                  <label>Preferred State</label>
+                  <input type="text" value={formData.preferences.preferredState} onChange={(e) => handleInputChange('preferences', 'preferredState', e.target.value)} placeholder="Maharashtra" />
                 </div>
                 <div className="form-group">
-                  <label htmlFor="budget" style={{ display: 'block', marginBottom: '0.5rem', fontWeight: '600', color: '#475569', fontSize: '0.9rem' }}>Annual Budget (Optional)</label>
-                  <select 
-                    id="budget"
-                    name="budget"
-                    value={formData.preferences.budget}
-                    onChange={(e) => handleInputChange('preferences', 'budget', e.target.value)}
-                    style={{ width: '100%', padding: '0.75rem', border: '1px solid #cbd5e1', borderRadius: '6px' }}
-                  >
+                  <label>Annual Budget</label>
+                  <select value={formData.preferences.budget} onChange={(e) => handleInputChange('preferences', 'budget', e.target.value)}>
                     <option value="">Select Range</option>
                     <option value="under_5">Under ₹5 Lakhs</option>
                     <option value="5_to_10">₹5 - ₹10 Lakhs</option>
-                    <option value="10_to_20">₹10 - ₹20 Lakhs</option>
-                    <option value="above_20">Above ₹20 Lakhs</option>
+                    <option value="above_10">Above ₹10 Lakhs</option>
                   </select>
                 </div>
               </div>

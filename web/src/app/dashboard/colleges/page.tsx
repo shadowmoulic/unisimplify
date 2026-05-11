@@ -89,7 +89,7 @@ export default function MyCollegesPage() {
 
   if (loading) {
     return (
-      <div className="loading-screen" style={{ flex: 1, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+      <div className="loading-screen">
         <div className="loader"></div>
       </div>
     );
@@ -97,66 +97,118 @@ export default function MyCollegesPage() {
 
   return (
     <main className="portal-main">
-      <header className="main-header-banner" style={{ padding: '2.5rem 3rem' }}>
+      <header className="main-header-banner">
         <div className="banner-content">
           <div className="banner-text">
             <h1>My Colleges</h1>
-            <p style={{ color: '#64748b', marginTop: '0.5rem' }}>Track your saved colleges and their application fees.</p>
+            <p className="banner-subtext">Track your saved colleges and their application fees.</p>
           </div>
         </div>
       </header>
 
       <div className="dashboard-content-area">
         {savedColleges.length === 0 ? (
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', padding: '4rem 2rem', textAlign: 'center' }}>
-            <Building2 size={48} color="#cbd5e1" style={{ margin: '0 auto 1rem' }} />
-            <h3 style={{ fontSize: '1.25rem', color: '#0f172a', marginBottom: '0.5rem' }}>No colleges added yet</h3>
-            <p style={{ color: '#64748b', marginBottom: '1.5rem' }}>Go to College Search to find and save institutions you want to apply to.</p>
-            <Link href="/discover" style={{ display: 'inline-block', background: '#10b981', color: '#fff', padding: '0.75rem 1.5rem', borderRadius: '8px', fontWeight: '600', textDecoration: 'none' }}>
+          <div className="empty-state-premium glass-panel">
+            <div className="empty-icon-box">
+              <Building2 size={48} />
+            </div>
+            <h3>No colleges added yet</h3>
+            <p>Go to College Search to find and save institutions you want to apply to.</p>
+            <Link href="/discover" className="btn-explore-premium">
               Explore Colleges
             </Link>
           </div>
         ) : (
-          <div style={{ background: '#fff', border: '1px solid #e2e8f0', borderRadius: '12px', overflow: 'hidden' }}>
-            <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
-              <thead>
-                <tr style={{ borderBottom: '1px solid #e2e8f0', background: '#f8fafc' }}>
-                  <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>College Name</th>
-                  <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>Location</th>
-                  <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>Deadline</th>
-                  <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>Application Fee</th>
-                  <th style={{ padding: '1rem 1.5rem', color: '#64748b', fontWeight: '600', fontSize: '0.85rem', textTransform: 'uppercase' }}>Actions</th>
-                </tr>
-              </thead>
-              <tbody>
-                {savedColleges.map((college, idx) => (
-                  <tr key={idx} style={{ borderBottom: '1px solid #e2e8f0' }}>
-                    <td style={{ padding: '1rem 1.5rem', color: '#0f172a', fontWeight: '600' }}>
-                      {college["University Name"]}
-                    </td>
-                    <td style={{ padding: '1rem 1.5rem', color: '#64748b', fontSize: '0.95rem' }}>
-                      {college.State}
-                    </td>
-                    <td style={{ padding: '1rem 1.5rem', color: '#e11d48', fontWeight: '700', fontSize: '0.9rem' }}>
-                      {college["Application Deadline"]}
-                    </td>
-                    <td style={{ padding: '1rem 1.5rem', color: '#0f172a', fontWeight: '600' }}>
-                      {college["Application Fee (INR)"]}
-                    </td>
-                    <td style={{ padding: '1rem 1.5rem' }}>
-                      <div style={{ display: 'flex', gap: '1rem' }}>
-                        <a href={`https://www.google.com/search?q=${encodeURIComponent(college["University Name"] + ' admission portal')}`} target="_blank" rel="noopener noreferrer" style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#10b981', textDecoration: 'none', fontSize: '0.85rem', fontWeight: '600' }}>
-                          <ExternalLink size={16} /> URL
-                        </a>
-                        <button onClick={() => handleRemove(college["University Name"])} style={{ display: 'flex', alignItems: 'center', gap: '0.25rem', color: '#ef4444', background: 'none', border: 'none', cursor: 'pointer', fontSize: '0.85rem', fontWeight: '600' }}>
-                          <Trash2 size={16} /> Remove
-                        </button>
-                      </div>
-                    </td>
+          <div className="college-list-container glass-panel">
+            <div className="college-table-wrapper">
+              <table className="premium-table">
+                <thead>
+                  <tr>
+                    <th>College Name</th>
+                    <th>Location</th>
+                    <th>Deadline</th>
+                    <th>Fee (INR)</th>
+                    <th>Actions</th>
                   </tr>
-                ))}
-              </tbody>
-            </table>
+                </thead>
+                <tbody>
+                  {savedColleges.map((college, idx) => (
+                    <tr key={idx}>
+                      <td className="col-name">
+                        <div className="col-brand-mini">
+                          <Building2 size={16} />
+                          {college["University Name"]}
+                        </div>
+                      </td>
+                      <td>{college.State}</td>
+                      <td>
+                        <span className="deadline-badge">
+                          {college["Application Deadline"]}
+                        </span>
+                      </td>
+                      <td className="font-bold">{college["Application Fee (INR)"]}</td>
+                      <td>
+                        <div className="action-row">
+                          <a 
+                            href={`https://www.google.com/search?q=${encodeURIComponent(college["University Name"] + ' admission portal')}`} 
+                            target="_blank" 
+                            rel="noopener noreferrer" 
+                            className="btn-url-small"
+                          >
+                            <ExternalLink size={14} /> Portal
+                          </a>
+                          <button 
+                            onClick={() => handleRemove(college["University Name"])} 
+                            className="btn-remove-small"
+                          >
+                            <Trash2 size={14} />
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  ))}
+                </tbody>
+              </table>
+            </div>
+
+            {/* Mobile View (Card Grid) */}
+            <div className="college-cards-mobile">
+              {savedColleges.map((college, idx) => (
+                <div key={idx} className="college-card-mobile glass-panel">
+                  <div className="card-header">
+                    <h3>{college["University Name"]}</h3>
+                    <button onClick={() => handleRemove(college["University Name"])} className="btn-remove-mini">
+                      <Trash2 size={16} />
+                    </button>
+                  </div>
+                  <div className="card-body">
+                    <div className="card-info-item">
+                      <span className="label">Location</span>
+                      <span className="value">{college.State}</span>
+                    </div>
+                    <div className="card-info-item">
+                      <span className="label">Deadline</span>
+                      <span className="value text-red">{college["Application Deadline"]}</span>
+                    </div>
+                    <div className="card-info-item">
+                      <span className="label">Fee</span>
+                      <span className="value font-bold">{college["Application Fee (INR)"]}</span>
+                    </div>
+                  </div>
+                  <div className="card-actions">
+                    <a 
+                      href={`https://www.google.com/search?q=${encodeURIComponent(college["University Name"] + ' admission portal')}`} 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="btn-portal-mobile"
+                    >
+                      <ExternalLink size={16} />
+                      Visit Admission Portal
+                    </a>
+                  </div>
+                </div>
+              ))}
+            </div>
           </div>
         )}
       </div>

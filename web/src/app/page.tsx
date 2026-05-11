@@ -129,10 +129,10 @@ export default function Home() {
       <section className="how-it-works-section">
         <div className="section-header-premium" style={{ textAlign: 'center', marginBottom: '4rem' }}>
           <div className="badge" style={{ margin: '0 auto 1rem' }}>PROCESS</div>
-          <h2 style={{ fontSize: '3rem', fontWeight: 800, color: '#0f172a', letterSpacing: '-0.04em' }}>
+          <h2 className="section-title-premium">
             Admission in 3 Simple Steps
           </h2>
-          <p style={{ color: '#64748b', fontSize: '1.1rem', maxWidth: '600px', margin: '1rem auto' }}>
+          <p className="section-subtitle-premium">
             We&apos;ve removed the paperwork and the stress. Focus on your future, not the forms.
           </p>
         </div>
@@ -146,8 +146,8 @@ export default function Home() {
             <div className="step-icon-wrapper">
               <User size={32} />
             </div>
-            <h3>Build Profile</h3>
-            <p>Create your Universal Profile once. We store your documents and details securely for all colleges.</p>
+            <h3>Create Profile</h3>
+            <p>Build your Universal Profile once. We securely store your documents and data for all future applications.</p>
           </motion.div>
 
           <motion.div 
@@ -158,8 +158,8 @@ export default function Home() {
             <div className="step-icon-wrapper">
               <Search size={32} />
             </div>
-            <h3>Discover Colleges</h3>
-            <p>Browse India&apos;s elite universities with high-fidelity filters and real-time admission data.</p>
+            <h3>Explore Colleges</h3>
+            <p>Browse India&apos;s elite universities with high-fidelity filters and real-time admission insights.</p>
           </motion.div>
 
           <motion.div 
@@ -170,8 +170,8 @@ export default function Home() {
             <div className="step-icon-wrapper">
               <Sparkles size={32} />
             </div>
-            <h3>Apply Faster</h3>
-            <p>One-tap application to multiple colleges. No repetitive forms, no wasted time.</p>
+            <h3>Apply in One Tap</h3>
+            <p>Apply to multiple universities instantly. No more repetitive forms, no more manual paperwork.</p>
           </motion.div>
         </div>
       </section>
@@ -255,24 +255,6 @@ export default function Home() {
         </div>
       </section>
 
-      <footer className="gen-z-footer">
-        <div className="footer-content">
-          <div className="f-logo">UniSimplify</div>
-          <div className="f-links">
-            <Link href="/universities">Universities</Link>
-            <Link href="/privacy">Privacy Policy</Link>
-            <Link href="/terms">Terms of Service</Link>
-            <Link href="/contact">Contact Us</Link>
-          </div>
-          <div className="f-socials">
-            <Globe size={22} aria-hidden />
-            <Mail size={22} aria-hidden />
-          </div>
-        </div>
-        <div className="footer-bottom">
-          <p>&copy; {new Date().getFullYear()} UniSimplify. All rights reserved.</p>
-        </div>
-      </footer>
     </div>
   );
 }
