@@ -3,6 +3,7 @@
 import React, { useState, useEffect } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Search, Filter, MapPin, Calendar, CreditCard, Award, ChevronRight, GraduationCap, Sparkles, BookmarkPlus, CheckCircle2, ExternalLink } from 'lucide-react';
+import NotificationModal from '@/components/NotificationModal';
 import { supabase } from '@/utils/supabase';
 import collegesDataRaw from '../../data/colleges.json';
 
@@ -29,6 +30,7 @@ export default function Discover() {
   const [selectedState, setSelectedState] = useState('All');
   const [user, setUser] = useState<any>(null);
   const [savedColleges, setSavedColleges] = useState<string[]>([]);
+  const [modalConfig, setModalConfig] = useState({ show: false, message: '', type: 'success', title: '' });
 
   const states = ['All', ...new Set(collegesData.map((c: College) => c.State))];
   const tiers = ['All', '1', '2', '3'];
@@ -67,7 +69,13 @@ export default function Discover() {
 
   const handleAddToList = (collegeName: string) => {
     if (!user) {
-      alert("Please sign in to save colleges to your list.");
+      setModalConfig({ 
+        show: true, 
+        message: 'Please sign in to save colleges to your list.', 
+        type: 'info', 
+        title: 'Sign In Required' 
+      });
+      setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
       return;
     }
     try {
@@ -80,16 +88,27 @@ export default function Discover() {
         setSavedColleges(newSaved);
         localStorage.setItem(storageKey, JSON.stringify(newSaved));
         
-        // Also save a backup using email just in case the ID changes or fails
         if (user.email) {
           localStorage.setItem(`saved_colleges_${user.email}`, JSON.stringify(newSaved));
         }
         
-        alert(`${collegeName} has been saved to your colleges list!`);
+        setModalConfig({ 
+          show: true, 
+          message: `${collegeName} has been saved to your list.`, 
+          type: 'success', 
+          title: 'Successfully Saved!' 
+        });
+        setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
       }
     } catch (err) {
       console.error("Failed to save college:", err);
-      alert("There was an error saving your college. Please try again.");
+      setModalConfig({ 
+        show: true, 
+        message: 'There was an error saving your college. Please try again.', 
+        type: 'error', 
+        title: 'Error' 
+      });
+      setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
     }
   };
 
@@ -251,6 +270,15 @@ export default function Discover() {
           ))}
         </AnimatePresence>
       </div>
+
+      {/* Soothing Bottom Notification Modal */}
+      <NotificationModal 
+        show={modalConfig.show}
+        message={modalConfig.message}
+        type={modalConfig.type as any}
+        title={modalConfig.title}
+        onClose={() => setModalConfig(prev => ({ ...prev, show: false }))}
+      />
     </div>
   );
 }

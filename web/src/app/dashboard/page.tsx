@@ -77,6 +77,13 @@ export default function Dashboard() {
 
   const userName = user?.user_metadata?.full_name || user?.email?.split('@')[0] || 'Student';
 
+  const getGreeting = () => {
+    const hour = new Date().getHours();
+    if (hour < 12) return 'Good morning';
+    if (hour < 17) return 'Good afternoon';
+    return 'Good evening';
+  };
+
   return (
     <>
 
@@ -85,7 +92,7 @@ export default function Dashboard() {
         <header className="main-header-banner">
           <div className="banner-content">
             <div className="banner-text">
-              <h1>Good afternoon, {userName}!</h1>
+              <h1>{getGreeting()}, {userName}!</h1>
             </div>
             <div className="banner-illustration">
               <svg viewBox="0 0 200 120" fill="none" xmlns="http://www.w3.org/2000/svg">

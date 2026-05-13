@@ -4,6 +4,7 @@ import React, { useState, useEffect } from 'react';
 import { supabase } from '@/utils/supabase';
 import { User, Lock, Bell, Shield, Save, LogOut } from 'lucide-react';
 import { useRouter } from 'next/navigation';
+import NotificationModal from '@/components/NotificationModal';
 
 export default function SettingsPage() {
   const router = useRouter();
@@ -11,6 +12,7 @@ export default function SettingsPage() {
   const [loading, setLoading] = useState(true);
   const [saving, setSaving] = useState(false);
   const [activeTab, setActiveTab] = useState('account');
+  const [modalConfig, setModalConfig] = useState({ show: false, message: '', type: 'success', title: '' });
 
   // Form State
   const [formData, setFormData] = useState({
@@ -43,12 +45,32 @@ export default function SettingsPage() {
 
   const handleSave = async () => {
     setSaving(true);
-    // Simulate API delay
-    await new Promise(resolve => setTimeout(resolve, 800));
-    
-    // In a real app, update Supabase user metadata
-    alert('Settings saved successfully!');
-    setSaving(false);
+    try {
+      const { error } = await supabase.auth.updateUser({
+        data: { full_name: formData.fullName }
+      });
+      
+      if (error) throw error;
+      
+      setModalConfig({
+        show: true,
+        title: 'Settings Saved',
+        message: 'Your profile has been updated successfully.',
+        type: 'success'
+      });
+      
+      setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
+    } catch (error: any) {
+      setModalConfig({
+        show: true,
+        title: 'Save Failed',
+        message: error.message || 'There was an error saving your settings.',
+        type: 'error'
+      });
+      setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
+    } finally {
+      setSaving(false);
+    }
   };
 
   const handlePasswordReset = async () => {
@@ -57,9 +79,21 @@ export default function SettingsPage() {
       await supabase.auth.resetPasswordForEmail(user.email, {
         redirectTo: `${window.location.origin}/auth/reset-password`,
       });
-      alert('Password reset link sent to your email!');
+      setModalConfig({
+        show: true,
+        title: 'Reset Link Sent',
+        message: 'Check your email for the password reset link.',
+        type: 'success'
+      });
+      setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
     } catch (error: any) {
-      alert('Error sending reset link: ' + error.message);
+      setModalConfig({
+        show: true,
+        title: 'Error',
+        message: error.message,
+        type: 'error'
+      });
+      setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
     }
   };
 
@@ -230,6 +264,14 @@ export default function SettingsPage() {
 
         </div>
       </div>
+      
+      <NotificationModal 
+        show={modalConfig.show}
+        message={modalConfig.message}
+        type={modalConfig.type as any}
+        title={modalConfig.title}
+        onClose={() => setModalConfig(prev => ({ ...prev, show: false }))}
+      />
     </main>
   );
 }
