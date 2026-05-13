@@ -13,16 +13,19 @@ import {
   AlertCircle,
   Stethoscope,
   MapPin,
-  Users2
+  Users2,
+  CheckCircle2
 } from 'lucide-react';
 import { supabase } from '@/utils/supabase';
 import { useRouter } from 'next/navigation';
+import NotificationModal from '@/components/NotificationModal';
 
 export default function CommonAppPage() {
   const router = useRouter();
   const [activeTab, setActiveTab] = useState('personal');
   const [loading, setLoading] = useState(false);
   const [user, setUser] = useState<any>(null);
+  const [modalConfig, setModalConfig] = useState({ show: false, message: '', type: 'success', title: '' });
 
   // Form State
   const [formData, setFormData] = useState({
@@ -52,7 +55,7 @@ export default function CommonAppPage() {
       ]
     },
     exams: { jeeMainScore: '', neetScore: '', cuetScore: '' },
-    documents: { idProofUrl: '', photoUrl: '' },
+    documents: { idProofUrl: '', photoUrl: '', idType: 'Aadhaar' },
     preferences: { preferredCourse: '', preferredState: '', budget: '' }
   });
 
@@ -88,6 +91,37 @@ export default function CommonAppPage() {
     "Uttarakhand State Board",
     "West Bengal State Board"
   ];
+  
+  const courseOptions = [
+    "B.Tech Computer Science",
+    "B.Tech Information Technology",
+    "B.Tech Electronics & Comm",
+    "B.Tech Mechanical Engineering",
+    "B.Tech Civil Engineering",
+    "B.Tech AI & Data Science",
+    "BS Mathematics",
+    "BS Physics",
+    "BS Chemistry",
+    "MBBS",
+    "BDS",
+    "B.Arch",
+    "BBA",
+    "BCA",
+    "B.Com (Hons)",
+    "B.Sc",
+    "B.A.",
+    "Law (LL.B)",
+    "Other"
+  ];
+
+  const stateOptions = [
+    "Andhra Pradesh", "Arunachal Pradesh", "Assam", "Bihar", "Chhattisgarh", 
+    "Goa", "Gujarat", "Haryana", "Himachal Pradesh", "Jharkhand", 
+    "Karnataka", "Kerala", "Madhya Pradesh", "Maharashtra", "Manipur", 
+    "Meghalaya", "Mizoram", "Nagaland", "Odisha", "Punjab", 
+    "Rajasthan", "Sikkim", "Tamil Nadu", "Telangana", "Tripura", 
+    "Uttar Pradesh", "Uttarakhand", "West Bengal", "Delhi", "Chandigarh"
+  ];
 
   useEffect(() => {
     const fetchUserAndProfile = async () => {
@@ -102,11 +136,51 @@ export default function CommonAppPage() {
   }, [router]);
 
   const handleInputChange = (section: string, field: string, value: any) => {
+    let validatedValue = value;
+    
+    // Robust validation for exam scores
+    if (section === 'exams') {
+      const num = parseFloat(value);
+      if (!isNaN(num)) {
+        if (field === 'jeeMainScore') {
+          if (num > 100) validatedValue = '100';
+          if (num < 0) validatedValue = '0';
+        } else if (field === 'neetScore') {
+          if (num > 720) validatedValue = '720';
+          if (num < 0) validatedValue = '0';
+        } else if (field === 'cuetScore') {
+          if (num > 800) validatedValue = '800';
+          if (num < 0) validatedValue = '0';
+        }
+      }
+    }
+
+    // Robust validation for file types
+    const fileFields = ['idProofUrl', 'photoUrl', 'categoryCertUrl'];
+    if (fileFields.includes(field)) {
+      const fileName = value.toLowerCase();
+      const isPhoto = field === 'photoUrl';
+      const allowedExtensions = isPhoto ? ['.jpg', '.jpeg', '.png'] : ['.pdf', '.jpg', '.jpeg', '.png'];
+      
+      const hasAllowedExtension = allowedExtensions.some(ext => fileName.endsWith(ext));
+      
+      if (value && !hasAllowedExtension) {
+        setModalConfig({
+          show: true,
+          title: 'Invalid File Type',
+          message: isPhoto ? 'Please upload a JPG or PNG image.' : 'Please upload a PDF or image file (JPG/PNG).',
+          type: 'error'
+        });
+        setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
+        return;
+      }
+    }
+
     setFormData(prev => ({
       ...prev,
       [section]: {
         ...(prev as any)[section],
-        [field]: value
+        [field]: validatedValue
       }
     }));
   };
@@ -140,9 +214,16 @@ export default function CommonAppPage() {
 
   const handleSave = async () => {
     setLoading(true);
+    // In a real app, you would save to Supabase here
     setTimeout(() => {
       setLoading(false);
-      alert('Application progress saved successfully!');
+      setModalConfig({
+        show: true,
+        title: 'Progress Saved',
+        message: 'Your common application progress has been saved successfully.',
+        type: 'success'
+      });
+      setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
     }, 800);
   };
 
@@ -246,8 +327,20 @@ export default function CommonAppPage() {
                 </div>
                 <div className="form-group">
                   <label>Category Certificate (Optional)</label>
-                  <input type="file" accept=".pdf,.jpg" onChange={(e) => handleInputChange('personal', 'categoryCertUrl', e.target.files?.[0]?.name || '')} />
-                  <span className="input-hint">Upload proof if belonging to reserved category</span>
+                  <div className="file-input-wrapper-premium">
+                    <input 
+                      type="file" 
+                      accept=".pdf,.jpg,.jpeg,.png" 
+                      onChange={(e) => handleInputChange('personal', 'categoryCertUrl', e.target.files?.[0]?.name || '')} 
+                    />
+                    {formData.personal.categoryCertUrl && (
+                      <div className="file-status-badge">
+                        <CheckCircle2 size={12} />
+                        <span>{formData.personal.categoryCertUrl}</span>
+                      </div>
+                    )}
+                  </div>
+                  <span className="input-hint">PDF, JPG, or PNG only</span>
                 </div>
                 <div className="form-group">
                   <label>Minority Status</label>
@@ -363,16 +456,41 @@ export default function CommonAppPage() {
               </div>
               <div className="form-grid-standard">
                 <div className="form-group">
-                  <label>JEE Main Percentile</label>
-                  <input type="text" value={formData.exams.jeeMainScore} onChange={(e) => handleInputChange('exams', 'jeeMainScore', e.target.value)} placeholder="98.5" />
+                  <label>JEE Main Percentile (0-100)</label>
+                  <input 
+                    type="number" 
+                    step="0.01"
+                    min="0"
+                    max="100"
+                    value={formData.exams.jeeMainScore} 
+                    onChange={(e) => handleInputChange('exams', 'jeeMainScore', e.target.value)} 
+                    placeholder="e.g. 98.5" 
+                  />
+                  <span className="input-hint">Must be between 0 and 100</span>
                 </div>
                 <div className="form-group">
-                  <label>NEET Score</label>
-                  <input type="text" value={formData.exams.neetScore} onChange={(e) => handleInputChange('exams', 'neetScore', e.target.value)} placeholder="650" />
+                  <label>NEET Score (0-720)</label>
+                  <input 
+                    type="number" 
+                    min="0"
+                    max="720"
+                    value={formData.exams.neetScore} 
+                    onChange={(e) => handleInputChange('exams', 'neetScore', e.target.value)} 
+                    placeholder="e.g. 650" 
+                  />
+                  <span className="input-hint">Maximum score is 720</span>
                 </div>
                 <div className="form-group">
-                  <label>CUET Score</label>
-                  <input type="text" value={formData.exams.cuetScore} onChange={(e) => handleInputChange('exams', 'cuetScore', e.target.value)} placeholder="780" />
+                  <label>CUET Score (0-800)</label>
+                  <input 
+                    type="number" 
+                    min="0"
+                    max="800"
+                    value={formData.exams.cuetScore} 
+                    onChange={(e) => handleInputChange('exams', 'cuetScore', e.target.value)} 
+                    placeholder="e.g. 780" 
+                  />
+                  <span className="input-hint">Commonly out of 800</span>
                 </div>
               </div>
             </div>
@@ -388,14 +506,52 @@ export default function CommonAppPage() {
                 <div className="upload-box-premium">
                   <FileText size={32} />
                   <h3>ID Proof</h3>
-                  <p>Aadhaar, PAN, or Passport</p>
-                  <input type="file" onChange={(e) => handleInputChange('documents', 'idProofUrl', e.target.files?.[0]?.name || '')} />
+                  <div className="form-group" style={{ margin: '1rem 0' }}>
+                    <select 
+                      value={formData.documents.idType} 
+                      onChange={(e) => handleInputChange('documents', 'idType', e.target.value)}
+                      style={{ width: '100%', padding: '0.5rem', borderRadius: '8px', border: '1px solid #e2e8f0' }}
+                    >
+                      <option value="Aadhaar">Aadhaar Card</option>
+                      <option value="PAN">PAN Card</option>
+                      <option value="Passport">Passport</option>
+                      <option value="Driving License">Driving License</option>
+                    </select>
+                  </div>
+                  <p>Upload your {formData.documents.idType}</p>
+                  <div className="file-input-wrapper-premium">
+                    <input 
+                      type="file" 
+                      accept=".pdf,.jpg,.jpeg,.png" 
+                      onChange={(e) => handleInputChange('documents', 'idProofUrl', e.target.files?.[0]?.name || '')} 
+                    />
+                    {formData.documents.idProofUrl && (
+                      <div className="file-status-badge">
+                        <CheckCircle2 size={12} />
+                        <span>{formData.documents.idProofUrl}</span>
+                      </div>
+                    )}
+                  </div>
+                  <span className="input-hint" style={{ fontSize: '0.7rem', color: '#94a3b8' }}>PDF, JPG, or PNG</span>
                 </div>
                 <div className="upload-box-premium">
                   <User size={32} />
                   <h3>Photograph</h3>
                   <p>Recent passport size photo</p>
-                  <input type="file" onChange={(e) => handleInputChange('documents', 'photoUrl', e.target.files?.[0]?.name || '')} />
+                  <div className="file-input-wrapper-premium">
+                    <input 
+                      type="file" 
+                      accept=".jpg,.jpeg,.png" 
+                      onChange={(e) => handleInputChange('documents', 'photoUrl', e.target.files?.[0]?.name || '')} 
+                    />
+                    {formData.documents.photoUrl && (
+                      <div className="file-status-badge">
+                        <CheckCircle2 size={12} />
+                        <span>{formData.documents.photoUrl}</span>
+                      </div>
+                    )}
+                  </div>
+                  <span className="input-hint" style={{ fontSize: '0.7rem', color: '#94a3b8' }}>JPG or PNG only</span>
                 </div>
               </div>
             </div>
@@ -410,11 +566,23 @@ export default function CommonAppPage() {
               <div className="form-grid-standard">
                 <div className="form-group">
                   <label>Preferred Course</label>
-                  <input type="text" value={formData.preferences.preferredCourse} onChange={(e) => handleInputChange('preferences', 'preferredCourse', e.target.value)} placeholder="B.Tech CS" />
+                  <select 
+                    value={formData.preferences.preferredCourse} 
+                    onChange={(e) => handleInputChange('preferences', 'preferredCourse', e.target.value)}
+                  >
+                    <option value="">Select Course</option>
+                    {courseOptions.map(course => <option key={course} value={course}>{course}</option>)}
+                  </select>
                 </div>
                 <div className="form-group">
                   <label>Preferred State</label>
-                  <input type="text" value={formData.preferences.preferredState} onChange={(e) => handleInputChange('preferences', 'preferredState', e.target.value)} placeholder="Maharashtra" />
+                  <select 
+                    value={formData.preferences.preferredState} 
+                    onChange={(e) => handleInputChange('preferences', 'preferredState', e.target.value)}
+                  >
+                    <option value="">Select State</option>
+                    {stateOptions.map(state => <option key={state} value={state}>{state}</option>)}
+                  </select>
                 </div>
                 <div className="form-group">
                   <label>Annual Budget</label>
@@ -431,6 +599,14 @@ export default function CommonAppPage() {
 
         </div>
       </div>
+
+      <NotificationModal 
+        show={modalConfig.show}
+        message={modalConfig.message}
+        type={modalConfig.type as any}
+        title={modalConfig.title}
+        onClose={() => setModalConfig(prev => ({ ...prev, show: false }))}
+      />
     </main>
   );
 }

@@ -40,7 +40,7 @@ export default function Home() {
   const faqs = [
     {
       q: "Is UniSimplify free?",
-      a: "Yes, creating your Universal Profile and discovering colleges is completely free. We only charge a small convenience fee if you choose to use our premium application tracking features."
+      a: "Yes, UniSimplify is 100% free for students. Creating your Universal Profile, discovering colleges, and tracking applications doesn't cost a single rupee. We are dedicated to making college admissions accessible for everyone."
     },
     {
       q: "Do colleges accept applications from UniSimplify?",
