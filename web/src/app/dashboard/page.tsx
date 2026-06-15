@@ -69,6 +69,30 @@ export default function Dashboard() {
       } else {
         setUser(session.user);
 
+        let userRole = session.user.user_metadata?.role || 'student';
+        try {
+          const { data: adminRecord } = await supabase
+            .from('unisimplify-college-admin')
+            .select('*')
+            .eq('email', session.user.email)
+            .maybeSingle();
+
+          if (adminRecord) {
+            userRole = adminRecord.role;
+          } else if (session.user.email?.toLowerCase() === 'sayak@kgphustlehouse.com') {
+            userRole = 'admin';
+          }
+        } catch (e) {
+          if (session.user.email?.toLowerCase() === 'sayak@kgphustlehouse.com') {
+            userRole = 'admin';
+          }
+        }
+
+        if (userRole === 'college') {
+          router.push('/college-dashboard');
+          return;
+        }
+
         let savedCount = 0;
         const savedNames = localStorage.getItem(`saved_colleges_${session.user.id}`);
         if (savedNames) {

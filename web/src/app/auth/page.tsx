@@ -262,75 +262,7 @@ function AuthContent() {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
-                 <div className="auth-input-group">
-                  <label>Register As</label>
-                  <div style={{ display: 'flex', gap: '1rem', marginTop: '0.25rem' }}>
-                    <button
-                      type="button"
-                      onClick={() => setSignupRole('student')}
-                      style={{
-                        flex: 1,
-                        padding: '0.75rem',
-                        borderRadius: '10px',
-                        border: '1px solid',
-                        borderColor: signupRole === 'student' ? '#10b981' : '#e2e8f0',
-                        background: signupRole === 'student' ? 'rgba(16, 185, 129, 0.08)' : 'transparent',
-                        color: signupRole === 'student' ? '#10b981' : '#94a3b8',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      Student
-                    </button>
-                    <button
-                      type="button"
-                      onClick={() => setSignupRole('college')}
-                      style={{
-                        flex: 1,
-                        padding: '0.75rem',
-                        borderRadius: '10px',
-                        border: '1px solid',
-                        borderColor: signupRole === 'college' ? '#10b981' : '#e2e8f0',
-                        background: signupRole === 'college' ? 'rgba(16, 185, 129, 0.08)' : 'transparent',
-                        color: signupRole === 'college' ? '#10b981' : '#94a3b8',
-                        fontWeight: 700,
-                        cursor: 'pointer',
-                        transition: 'all 0.2s'
-                      }}
-                    >
-                      College Rep
-                    </button>
-                  </div>
-                </div>
 
-                {signupRole === 'college' && (
-                  <div className="auth-input-group">
-                    <label>Select Your University</label>
-                    <select
-                      value={selectedCollege}
-                      onChange={(e) => setSelectedCollege(e.target.value)}
-                      required
-                      style={{
-                        width: '100%',
-                        padding: '0.75rem',
-                        borderRadius: '10px',
-                        border: '1px solid #e2e8f0',
-                        background: 'transparent',
-                        color: '#fff',
-                        fontWeight: 600,
-                        outline: 'none'
-                      }}
-                    >
-                      <option value="" style={{ color: '#0f172a' }}>-- Choose University --</option>
-                      {collegesDataRaw.map(c => (
-                        <option key={c["University Name"]} value={c["University Name"]} style={{ color: '#0f172a' }}>
-                          {c["University Name"]}
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                )}
 
                 <div className="auth-input-group">
                   <label>Password</label>

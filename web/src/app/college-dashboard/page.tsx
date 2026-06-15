@@ -54,6 +54,7 @@ export default function CollegeDashboard() {
   const [editingUser, setEditingUser] = useState<UserProfile | null>(null);
   const [editRole, setEditRole] = useState<'student' | 'college' | 'admin'>('student');
   const [editCollegeName, setEditCollegeName] = useState('');
+  const [editCollegeUrl, setEditCollegeUrl] = useState('');
 
   // UI tabs for admin
   const [activeTab, setActiveTab] = useState<'overview' | 'users' | 'logs'>('overview');
@@ -193,8 +194,7 @@ export default function CollegeDashboard() {
 
     let targetCollegeUrl = '';
     if (editRole === 'college') {
-      const matched = collegesDataRaw.find(c => c["University Name"] === editCollegeName);
-      targetCollegeUrl = matched ? (matched.URL || 'https://saiuniversity.edu.in') : 'https://saiuniversity.edu.in';
+      targetCollegeUrl = editCollegeUrl || 'https://saiuniversity.edu.in';
     }
 
     // Update in Supabase unisimplify-college-admin table
@@ -529,7 +529,7 @@ export default function CollegeDashboard() {
               }}>
                 <div className="dashboard-section" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Total Student Logins</span>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Student Portal Visits</span>
                     <Activity size={20} className="text-emerald" style={{ color: '#10b981' }} />
                   </div>
                   <h2 style={{ fontSize: '2rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{collegeLogs.length}</h2>
@@ -538,7 +538,7 @@ export default function CollegeDashboard() {
 
                 <div className="dashboard-section" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Active Applications</span>
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Registered for {targetedCollege}</span>
                     <Users size={20} style={{ color: '#3b82f6' }} />
                   </div>
                   <h2 style={{ fontSize: '2rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{collegeStudents.length}</h2>
@@ -712,83 +712,94 @@ export default function CollegeDashboard() {
                       </tr>
                     </thead>
                     <tbody>
-                      {filteredUsers.map((u) => (
-                        <tr key={u.id} style={{ borderBottom: '1px solid #f1f5f9', fontSize: '0.9rem' }}>
-                          <td style={{ padding: '1rem 0.5rem' }}>
-                            <div style={{ fontWeight: 700, color: '#0f172a' }}>{u.fullName || 'Anonymous User'}</div>
-                            <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{u.email}</div>
-                          </td>
-                          <td style={{ padding: '1rem 0.5rem' }}>
-                            <span style={{
-                              padding: '0.25rem 0.6rem',
-                              borderRadius: '6px',
-                              fontSize: '0.75rem',
-                              fontWeight: 800,
-                              background: u.role === 'admin' ? 'rgba(239,68,68,0.1)' : u.role === 'college' ? 'rgba(16,185,129,0.1)' : '#f1f5f9',
-                              color: u.role === 'admin' ? '#ef4444' : u.role === 'college' ? '#10b981' : '#334155'
-                            }}>
-                              {u.role.toUpperCase()}
-                            </span>
-                          </td>
-                          <td style={{ padding: '1rem 0.5rem' }}>
-                            {u.role === 'college' ? (
-                              <div style={{ display: 'flex', flexDirection: 'column' }}>
-                                <span style={{ fontWeight: 600, color: '#0f172a' }}>{u.collegeName}</span>
-                                {u.collegeUrl && (
-                                  <a href={u.collegeUrl} target="_blank" rel="noreferrer" style={{ fontSize: '0.75rem', color: '#3b82f6', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.1rem' }}>
-                                    Link <ExternalLink size={10} />
-                                  </a>
+                      {filteredUsers.map((u) => {
+                        const isAdminUser = u.role === 'admin';
+                        const isCurrentSuper = currentUser?.email?.toLowerCase() === 'sayak@kgphustlehouse.com';
+                        return (
+                          <tr key={u.id} style={{ borderBottom: '1px solid #f1f5f9', fontSize: '0.9rem' }}>
+                            <td style={{ padding: '1rem 0.5rem' }}>
+                              <div style={{ fontWeight: 700, color: '#0f172a' }}>{u.fullName || 'Anonymous User'}</div>
+                              <div style={{ fontSize: '0.8rem', color: '#64748b' }}>{u.email}</div>
+                            </td>
+                            <td style={{ padding: '1rem 0.5rem' }}>
+                              <span style={{
+                                padding: '0.25rem 0.6rem',
+                                borderRadius: '6px',
+                                fontSize: '0.75rem',
+                                fontWeight: 800,
+                                background: u.role === 'admin' ? 'rgba(239,68,68,0.1)' : u.role === 'college' ? 'rgba(16,185,129,0.1)' : '#f1f5f9',
+                                color: u.role === 'admin' ? '#ef4444' : u.role === 'college' ? '#10b981' : '#334155'
+                              }}>
+                                {u.role.toUpperCase()}
+                              </span>
+                            </td>
+                            <td style={{ padding: '1rem 0.5rem' }}>
+                              {u.role === 'college' ? (
+                                <div style={{ display: 'flex', flexDirection: 'column' }}>
+                                  <span style={{ fontWeight: 600, color: '#0f172a' }}>{u.collegeName}</span>
+                                  {u.collegeUrl && (
+                                    <a href={u.collegeUrl} target="_blank" rel="noreferrer" style={{ fontSize: '0.75rem', color: '#3b82f6', textDecoration: 'none', display: 'flex', alignItems: 'center', gap: '0.1rem' }}>
+                                      Link <ExternalLink size={10} />
+                                    </a>
+                                  )}
+                                </div>
+                              ) : (
+                                <span style={{ color: '#64748b' }}>None</span>
+                              )}
+                            </td>
+                            <td style={{ padding: '1rem 0.5rem', color: '#64748b' }}>
+                              {u.lastLogin ? new Date(u.lastLogin).toLocaleString() : 'Never logged in'}
+                            </td>
+                            <td style={{ padding: '1rem 0.5rem', textAlign: 'right' }}>
+                              <div style={{ display: 'inline-flex', gap: '0.5rem' }}>
+                                {(!isAdminUser || isCurrentSuper) ? (
+                                  <>
+                                    <button 
+                                      onClick={() => {
+                                        setEditingUser(u);
+                                        setEditRole(u.role);
+                                        setEditCollegeName(u.collegeName || '');
+                                        setEditCollegeUrl(u.collegeUrl || '');
+                                      }}
+                                      style={{
+                                        background: '#ffffff',
+                                        border: '1px solid #e2e8f0',
+                                        borderRadius: '8px',
+                                        color: '#334155',
+                                        padding: '0.4rem 0.8rem',
+                                        fontSize: '0.8rem',
+                                        fontWeight: 700,
+                                        cursor: 'pointer',
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        gap: '0.25rem'
+                                      }}
+                                    >
+                                      <Edit2 size={12} /> Edit Role
+                                    </button>
+                                    <button 
+                                      onClick={() => handleRemoveUserSimulated(u.email)}
+                                      style={{
+                                        background: 'rgba(239, 68, 68, 0.05)',
+                                        border: '1px solid rgba(239, 68, 68, 0.15)',
+                                        borderRadius: '8px',
+                                        color: '#ef4444',
+                                        padding: '0.4rem',
+                                        cursor: 'pointer'
+                                      }}
+                                      title="Delete Simulated User"
+                                    >
+                                      <Trash2 size={14} />
+                                    </button>
+                                  </>
+                                ) : (
+                                  <span style={{ fontSize: '0.8rem', color: '#94a3b8', fontStyle: 'italic' }}>Protected Admin</span>
                                 )}
                               </div>
-                            ) : (
-                              <span style={{ color: '#64748b' }}>None</span>
-                            )}
-                          </td>
-                          <td style={{ padding: '1rem 0.5rem', color: '#64748b' }}>
-                            {u.lastLogin ? new Date(u.lastLogin).toLocaleString() : 'Never logged in'}
-                          </td>
-                          <td style={{ padding: '1rem 0.5rem', textAlign: 'right' }}>
-                            <div style={{ display: 'inline-flex', gap: '0.5rem' }}>
-                              <button 
-                                onClick={() => {
-                                  setEditingUser(u);
-                                  setEditRole(u.role);
-                                  setEditCollegeName(u.collegeName || '');
-                                }}
-                                style={{
-                                  background: '#ffffff',
-                                  border: '1px solid #e2e8f0',
-                                  borderRadius: '8px',
-                                  color: '#334155',
-                                  padding: '0.4rem 0.8rem',
-                                  fontSize: '0.8rem',
-                                  fontWeight: 700,
-                                  cursor: 'pointer',
-                                  display: 'flex',
-                                  alignItems: 'center',
-                                  gap: '0.25rem'
-                                }}
-                              >
-                                <Edit2 size={12} /> Edit Role
-                              </button>
-                              <button 
-                                onClick={() => handleRemoveUserSimulated(u.email)}
-                                style={{
-                                  background: 'rgba(239, 68, 68, 0.05)',
-                                  border: '1px solid rgba(239, 68, 68, 0.15)',
-                                  borderRadius: '8px',
-                                  color: '#ef4444',
-                                  padding: '0.4rem',
-                                  cursor: 'pointer'
-                                }}
-                                title="Delete Simulated User"
-                              >
-                                <Trash2 size={14} />
-                              </button>
-                            </div>
-                          </td>
-                        </tr>
-                      ))}
+                            </td>
+                          </tr>
+                        );
+                      })}
                     </tbody>
                   </table>
                 </div>
@@ -843,37 +854,68 @@ export default function CollegeDashboard() {
                         >
                           <option value="student">Student (Standard User)</option>
                           <option value="college">College Representative</option>
-                          <option value="admin">System Admin</option>
+                          {currentUser?.email?.toLowerCase() === 'sayak@kgphustlehouse.com' && (
+                            <option value="admin">System Admin</option>
+                          )}
                         </select>
                       </div>
 
                       {editRole === 'college' && (
-                        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
-                          <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#334155' }}>Linked University</label>
-                          <select 
-                            value={editCollegeName} 
-                            onChange={(e) => setEditCollegeName(e.target.value)}
-                            required
-                            style={{
-                              background: '#ffffff',
-                              border: '1px solid #e2e8f0',
-                              color: '#0f172a',
-                              padding: '0.75rem',
-                              borderRadius: '10px',
-                              outline: 'none',
-                              fontWeight: 600
-                            }}
-                          >
-                            <option value="">-- Choose University --</option>
-                            {collegesDataRaw.map(c => (
-                              <option key={c["University Name"]} value={c["University Name"]}>
-                                {c["University Name"]}
-                              </option>
-                            ))}
-                          </select>
-                          <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
-                            Selecting this will automatically link the user to the official website URL.
-                          </span>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#334155' }}>Linked University</label>
+                            <select 
+                              value={editCollegeName} 
+                              onChange={(e) => {
+                                const newName = e.target.value;
+                                setEditCollegeName(newName);
+                                const matched = collegesDataRaw.find(c => c["University Name"] === newName);
+                                setEditCollegeUrl(matched ? (matched.URL || '') : '');
+                              }}
+                              required
+                              style={{
+                                width: '100%',
+                                background: '#ffffff',
+                                border: '1px solid #e2e8f0',
+                                color: '#0f172a',
+                                padding: '0.75rem',
+                                borderRadius: '10px',
+                                outline: 'none',
+                                fontWeight: 600
+                              }}
+                            >
+                              <option value="">-- Choose University --</option>
+                              {collegesDataRaw.map(c => (
+                                <option key={c["University Name"]} value={c["University Name"]}>
+                                  {c["University Name"]}
+                                </option>
+                              ))}
+                            </select>
+                          </div>
+                          
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+                            <label style={{ fontSize: '0.85rem', fontWeight: 700, color: '#334155' }}>Linked University URL</label>
+                            <input 
+                              type="url" 
+                              placeholder="https://..." 
+                              value={editCollegeUrl}
+                              onChange={(e) => setEditCollegeUrl(e.target.value)}
+                              required
+                              style={{
+                                width: '100%',
+                                background: '#ffffff',
+                                border: '1px solid #e2e8f0',
+                                color: '#0f172a',
+                                padding: '0.75rem',
+                                borderRadius: '10px',
+                                outline: 'none',
+                                fontWeight: 600
+                              }}
+                            />
+                            <span style={{ fontSize: '0.75rem', color: '#64748b' }}>
+                              Prefilled automatically based on university selection, but fully customizable.
+                            </span>
+                          </div>
                         </div>
                       )}
 

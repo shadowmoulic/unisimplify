@@ -100,7 +100,7 @@ export default function DashboardLayout({
 
         <nav className="sidebar-nav">
           <div className="nav-group">
-            <Link href="/dashboard" className={`nav-item ${pathname === '/dashboard' ? 'active' : ''}`}>
+            <Link href={role === 'college' ? '/college-dashboard' : '/dashboard'} className={`nav-item ${pathname === '/dashboard' ? 'active' : ''}`}>
               <Home size={20} />
               <span>Dashboard</span>
             </Link>
@@ -159,7 +159,7 @@ export default function DashboardLayout({
 
       {/* MOBILE BOTTOM NAV */}
       <nav className="mobile-bottom-nav">
-        <Link href="/dashboard" className={`mobile-nav-item ${pathname === '/dashboard' ? 'active' : ''}`}>
+        <Link href={role === 'college' ? '/college-dashboard' : '/dashboard'} className={`mobile-nav-item ${pathname === '/dashboard' ? 'active' : ''}`}>
           <Home size={22} />
           <span>Home</span>
         </Link>

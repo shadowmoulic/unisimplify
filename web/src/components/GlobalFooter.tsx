@@ -20,7 +20,7 @@ export default function GlobalFooter() {
   const pathname = usePathname();
   
   // Do not show footer on dashboard pages
-  if (pathname?.startsWith('/dashboard')) return null;
+  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/college-dashboard')) return null;
 
   return (
     <footer className="premium-global-footer">

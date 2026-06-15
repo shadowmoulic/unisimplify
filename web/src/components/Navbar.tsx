@@ -28,7 +28,7 @@ export default function Navbar() {
     };
   }, []);
 
-  if (pathname?.startsWith('/dashboard')) {
+  if (pathname?.startsWith('/dashboard') || pathname?.startsWith('/college-dashboard')) {
     return null;
   }
 
