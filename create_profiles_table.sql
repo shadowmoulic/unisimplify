@@ -39,3 +39,12 @@ CREATE POLICY "Allow users to read their own profile" ON "unisimplify-profiles"
 -- Allow users to create/update only their own profile
 CREATE POLICY "Allow users to insert/update their own profile" ON "unisimplify-profiles"
   FOR ALL USING (auth.uid() = user_id);
+
+-- Allow admins and college representatives to read all student profiles
+CREATE POLICY "Allow admins and college reps to read profiles" ON "unisimplify-profiles"
+  FOR SELECT USING (
+    EXISTS (
+      SELECT 1 FROM "unisimplify-college-admin"
+      WHERE email = auth.jwt()->>'email' AND role IN ('admin', 'college')
+    )
+  );

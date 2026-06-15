@@ -29,3 +29,11 @@ INSERT INTO "unisimplify-college-admin" (email, role)
 VALUES ('sayak@kgphustlehouse.com', 'admin')
 ON CONFLICT (email) DO UPDATE SET
   role = 'admin';
+
+-- Insert Sai University test account as a college admin representative
+INSERT INTO "unisimplify-college-admin" (email, role, college_name, college_url)
+VALUES ('sai-college-test@gmail.com', 'college', 'Sai University', 'https://saiuniversity.edu.in')
+ON CONFLICT (email) DO UPDATE SET
+  role = 'college',
+  college_name = 'Sai University',
+  college_url = 'https://saiuniversity.edu.in';
