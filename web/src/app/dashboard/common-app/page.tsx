@@ -131,6 +131,63 @@ export default function CommonAppPage() {
         return;
       }
       setUser(session.user);
+
+      try {
+        const { data: dbProfile, error: dbError } = await supabase
+          .from('unisimplify-profiles')
+          .select('*')
+          .eq('user_id', session.user.id)
+          .maybeSingle();
+
+        if (dbError) {
+          console.error("Error loading profile from Supabase:", dbError);
+        } else if (dbProfile) {
+          setFormData({
+            personal: { 
+              firstName: dbProfile.first_name || '', 
+              lastName: dbProfile.last_name || '', 
+              dob: dbProfile.dob || '', 
+              phone: dbProfile.phone || '',
+              caste: dbProfile.caste || 'General',
+              categoryCertUrl: dbProfile.category_cert_url || '',
+              minorityStatus: dbProfile.minority_status || 'No',
+              isDiabetic: dbProfile.is_diabetic || 'No',
+              birthPlace: dbProfile.birth_place || '',
+              isTwin: dbProfile.is_twin || 'No'
+            },
+            academic: { 
+              schoolBoard: dbProfile.school_board || '', 
+              percentage10: dbProfile.percentage_10 ? Number(dbProfile.percentage_10) : 85, 
+              percentage12: dbProfile.percentage_12 ? Number(dbProfile.percentage_12) : 85, 
+              stream: dbProfile.stream || '',
+              subjects12: Array.isArray(dbProfile.subjects_12) ? dbProfile.subjects_12 : [
+                { name: 'Physics', marks: '' },
+                { name: 'Chemistry', marks: '' },
+                { name: 'Mathematics', marks: '' },
+                { name: 'English', marks: '' },
+                { name: '', marks: '' }
+              ]
+            },
+            exams: { 
+              jeeMainScore: dbProfile.jee_main_score !== null ? String(dbProfile.jee_main_score) : '', 
+              neetScore: dbProfile.neet_score !== null ? String(dbProfile.neet_score) : '', 
+              cuetScore: dbProfile.cuet_score !== null ? String(dbProfile.cuet_score) : '' 
+            },
+            documents: { 
+              idProofUrl: dbProfile.id_proof_url || '', 
+              photoUrl: dbProfile.photo_url || '', 
+              idType: dbProfile.id_type || 'Aadhaar' 
+            },
+            preferences: { 
+              preferredCourse: dbProfile.preferred_course || '', 
+              preferredState: dbProfile.preferred_state || '', 
+              budget: dbProfile.budget || '' 
+            }
+          });
+        }
+      } catch (err) {
+        console.error("Exception loading profile:", err);
+      }
     };
     fetchUserAndProfile();
   }, [router]);
@@ -213,18 +270,65 @@ export default function CommonAppPage() {
   };
 
   const handleSave = async () => {
+    if (!user) return;
     setLoading(true);
-    // In a real app, you would save to Supabase here
-    setTimeout(() => {
-      setLoading(false);
+
+    try {
+      const { error } = await supabase
+        .from('unisimplify-profiles')
+        .upsert({
+          user_id: user.id,
+          email: user.email,
+          first_name: formData.personal.firstName,
+          last_name: formData.personal.lastName,
+          dob: formData.personal.dob,
+          phone: formData.personal.phone,
+          caste: formData.personal.caste,
+          category_cert_url: formData.personal.categoryCertUrl,
+          minority_status: formData.personal.minorityStatus,
+          is_diabetic: formData.personal.isDiabetic,
+          birth_place: formData.personal.birthPlace,
+          is_twin: formData.personal.isTwin,
+          school_board: formData.academic.schoolBoard,
+          percentage_10: formData.academic.percentage10,
+          percentage_12: formData.academic.percentage12,
+          stream: formData.academic.stream,
+          subjects_12: formData.academic.subjects12,
+          jee_main_score: formData.exams.jeeMainScore ? parseFloat(formData.exams.jeeMainScore) : null,
+          neet_score: formData.exams.neetScore ? parseFloat(formData.exams.neetScore) : null,
+          cuet_score: formData.exams.cuetScore ? parseFloat(formData.exams.cuetScore) : null,
+          id_proof_url: formData.documents.idProofUrl,
+          photo_url: formData.documents.photoUrl,
+          id_type: formData.documents.idType,
+          preferred_course: formData.preferences.preferredCourse,
+          preferred_state: formData.preferences.preferredState,
+          budget: formData.preferences.budget,
+          updated_at: new Date().toISOString()
+        });
+
+      if (error) {
+        throw error;
+      }
+
       setModalConfig({
         show: true,
         title: 'Progress Saved',
-        message: 'Your common application progress has been saved successfully.',
+        message: 'Your common application progress has been saved to Supabase successfully.',
         type: 'success'
       });
       setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
-    }, 800);
+    } catch (err: any) {
+      console.error("Failed to save profile:", err);
+      setModalConfig({
+        show: true,
+        title: 'Save Failed',
+        message: err.message || 'There was an error saving your progress to Supabase.',
+        type: 'error'
+      });
+      setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
+    } finally {
+      setLoading(false);
+    }
   };
 
   const tabs = [

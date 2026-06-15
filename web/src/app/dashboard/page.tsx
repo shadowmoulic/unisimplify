@@ -2,15 +2,15 @@
 
 import React, { useEffect, useState } from 'react';
 import { motion } from 'framer-motion';
-import { 
-  Home, 
-  FileText, 
-  Building2, 
-  Search, 
-  ShieldCheck, 
-  BadgeIndianRupee, 
-  Settings, 
-  LogOut, 
+import {
+  Home,
+  FileText,
+  Building2,
+  Search,
+  ShieldCheck,
+  BadgeIndianRupee,
+  Settings,
+  LogOut,
   User,
   Users,
   GraduationCap,
@@ -36,6 +36,7 @@ export default function Dashboard() {
     completionPercentage: 0
   });
   const [searchQuery, setSearchQuery] = useState('');
+  const [showHelp, setShowHelp] = useState(true);
 
   const allFaqs = [
     { q: "Is UniSimplify really free?", a: "Yes! It's 100% free for students. We don't charge any platform fees for your Universal Profile or discovery." },
@@ -55,8 +56,8 @@ export default function Dashboard() {
     { q: "How do I contact support?", a: "You can reach out via the 'Contact' page or email us at support@unisimplify.in." }
   ];
 
-  const filteredFaqs = allFaqs.filter(faq => 
-    faq.q.toLowerCase().includes(searchQuery.toLowerCase()) || 
+  const filteredFaqs = allFaqs.filter(faq =>
+    faq.q.toLowerCase().includes(searchQuery.toLowerCase()) ||
     faq.a.toLowerCase().includes(searchQuery.toLowerCase())
   );
 
@@ -67,7 +68,7 @@ export default function Dashboard() {
         router.push('/auth');
       } else {
         setUser(session.user);
-        
+
         let savedCount = 0;
         const savedNames = localStorage.getItem(`saved_colleges_${session.user.id}`);
         if (savedNames) {
@@ -129,7 +130,30 @@ export default function Dashboard() {
         </header>
 
         <div className="dashboard-content-area">
-          <h2 className="page-title">Dashboard</h2>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '2.5rem' }}>
+            <h2 className="page-title" style={{ margin: 0 }}>Dashboard</h2>
+            <button 
+              onClick={() => setShowHelp(!showHelp)}
+              style={{
+                display: 'flex',
+                alignItems: 'center',
+                gap: '0.5rem',
+                padding: '0.6rem 1.2rem',
+                borderRadius: '10px',
+                border: '1px solid #e2e8f0',
+                background: '#fff',
+                color: '#64748b',
+                fontWeight: 700,
+                fontSize: '0.85rem',
+                cursor: 'pointer',
+                transition: 'all 0.2s',
+                outline: 'none'
+              }}
+            >
+              <HelpCircle size={16} />
+              {showHelp ? 'Hide Help' : 'Show Help'}
+            </button>
+          </div>
 
           <section className="dashboard-section glass-panel">
             <div className="section-header-collapsible">
@@ -138,14 +162,14 @@ export default function Dashboard() {
                 <h3>My UniSimplify Application</h3>
               </div>
             </div>
-            
+
             <div className="section-body">
               <div className="progress-container">
                 <div className="progress-label">
                   <span className="text-red">{profileData.completedSections}/{profileData.totalSections} sections complete</span>
                 </div>
                 <div className="progress-track">
-                  <div className="progress-fill red" style={{ width: `${(profileData.completedSections/profileData.totalSections)*100}%` }}></div>
+                  <div className="progress-fill red" style={{ width: `${(profileData.completedSections / profileData.totalSections) * 100}%` }}></div>
                 </div>
               </div>
 
@@ -176,7 +200,7 @@ export default function Dashboard() {
               </div>
             </div>
             <div className="section-body">
-               <div className="progress-container">
+              <div className="progress-container">
                 <div className="progress-label">
                   <span className="text-red">{profileData.collegesCount} colleges on my list</span>
                 </div>
@@ -199,48 +223,50 @@ export default function Dashboard() {
       </main>
 
       {/* RIGHT SIDEBAR */}
-      <aside className="portal-support">
-        <div className="support-header">
-          <HelpCircle size={20} />
-          <h3>Help & support</h3>
-        </div>
-        <p className="support-intro-text" style={{ fontSize: '0.85rem', color: '#64748b', padding: '0 1.5rem', marginBottom: '1.5rem', fontWeight: 600, lineHeight: '1.4' }}>
-          We are your dedicated admission partners. If you're stuck or have questions, we're the types to stay with you until it's solved—all for free.
-        </p>
-
-        <div className="support-search">
-          <label>Search FAQs</label>
-          <div className="search-box">
-            <input 
-              type="text" 
-              placeholder="How do I..." 
-              value={searchQuery}
-              onChange={(e) => setSearchQuery(e.target.value)}
-            />
-            <button className="search-btn"><SearchIcon size={18} /></button>
+      {showHelp && (
+        <aside className="portal-support">
+          <div className="support-header">
+            <HelpCircle size={20} />
+            <h3>Help & support</h3>
           </div>
-          <p className="search-hint">Search {allFaqs.length} curated questions</p>
-        </div>
+          <p className="support-intro-text" style={{ fontSize: '0.85rem', color: '#64748b', padding: '0 1.5rem', marginBottom: '1.5rem', fontWeight: 600, lineHeight: '1.4' }}>
+            We are your dedicated admission partners. If you're stuck or have questions, we're the types to stay with you until it's solved—all for free.
+          </p>
 
-        <div className="faq-list">
-          {filteredFaqs.length > 0 ? (
-            filteredFaqs.map((faq, index) => (
-              <div key={index} className="faq-item">
-                <div className="faq-q">
-                  <span>{faq.q}</span>
+          <div className="support-search">
+            <label>Search FAQs</label>
+            <div className="search-box">
+              <input
+                type="text"
+                placeholder="How do I..."
+                value={searchQuery}
+                onChange={(e) => setSearchQuery(e.target.value)}
+              />
+              <button className="search-btn"><SearchIcon size={18} /></button>
+            </div>
+            <p className="search-hint">Search {allFaqs.length} curated questions</p>
+          </div>
+
+          <div className="faq-list">
+            {filteredFaqs.length > 0 ? (
+              filteredFaqs.map((faq, index) => (
+                <div key={index} className="faq-item">
+                  <div className="faq-q">
+                    <span>{faq.q}</span>
+                  </div>
+                  <div className="faq-a">
+                    <p>{faq.a}</p>
+                  </div>
                 </div>
-                <div className="faq-a">
-                  <p>{faq.a}</p>
-                </div>
-              </div>
-            ))
-          ) : (
-            <p style={{ fontSize: '0.85rem', color: '#94a3b8', textAlign: 'center', marginTop: '2rem' }}>
-              No matching questions found.
-            </p>
-          )}
-        </div>
-      </aside>
+              ))
+            ) : (
+              <p style={{ fontSize: '0.85rem', color: '#94a3b8', textAlign: 'center', marginTop: '2rem' }}>
+                No matching questions found.
+              </p>
+            )}
+          </div>
+        </aside>
+      )}
 
     </>
   );
