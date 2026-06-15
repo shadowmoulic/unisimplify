@@ -26,7 +26,7 @@ export default function UniversitiesDirectory() {
   const [filteredColleges, setFilteredColleges] = useState<College[]>(collegesData);
 
   useEffect(() => {
-    const results = collegesData.filter((college: College) => 
+    const results = collegesData.filter((college: College) =>
       college["University Name"].toLowerCase().includes(searchTerm.toLowerCase()) ||
       college.State.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -43,8 +43,8 @@ export default function UniversitiesDirectory() {
           <div className="badge" style={{ margin: '0 auto 1.5rem' }}>DIRECTORY</div>
           <h1>University Directory</h1>
           <p>
-            Browse and research India&apos;s leading educational institutions. 
-            Detailed profiles and admission requirements for 2025.
+            Browse and research India&apos;s leading educational institutions.
+            Detailed profiles and admission requirements for 2026.
           </p>
         </motion.div>
       </section>
@@ -52,9 +52,9 @@ export default function UniversitiesDirectory() {
       <section className="search-container-premium" style={{ maxWidth: '800px', marginBottom: '4rem' }}>
         <div className="premium-search-input-wrapper">
           <Search className="premium-search-icon" size={20} />
-          <input 
-            type="text" 
-            placeholder="Search universities by name or state..." 
+          <input
+            type="text"
+            placeholder="Search universities by name or state..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
@@ -66,7 +66,7 @@ export default function UniversitiesDirectory() {
           TOTAL INSTITUTIONS: <span className="text-emerald">{filteredColleges.length}</span>
         </div>
         <div style={{ fontWeight: 800, fontSize: '0.8rem', color: '#94a3b8' }}>
-          VERIFIED DATA 2025
+          VERIFIED DATA 2026
         </div>
       </div>
 

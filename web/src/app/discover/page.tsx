@@ -69,11 +69,11 @@ export default function Discover() {
 
   const handleAddToList = (collegeName: string) => {
     if (!user) {
-      setModalConfig({ 
-        show: true, 
-        message: 'Please sign in to save colleges to your list.', 
-        type: 'info', 
-        title: 'Sign In Required' 
+      setModalConfig({
+        show: true,
+        message: 'Please sign in to save colleges to your list.',
+        type: 'info',
+        title: 'Sign In Required'
       });
       setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
       return;
@@ -82,38 +82,38 @@ export default function Discover() {
       const storageKey = `saved_colleges_${user.id}`;
       const currentSavedStr = localStorage.getItem(storageKey);
       const currentSaved = currentSavedStr ? JSON.parse(currentSavedStr) : [];
-      
+
       if (!currentSaved.includes(collegeName)) {
         const newSaved = [...currentSaved, collegeName];
         setSavedColleges(newSaved);
         localStorage.setItem(storageKey, JSON.stringify(newSaved));
-        
+
         if (user.email) {
           localStorage.setItem(`saved_colleges_${user.email}`, JSON.stringify(newSaved));
         }
-        
-        setModalConfig({ 
-          show: true, 
-          message: `${collegeName} has been saved to your list.`, 
-          type: 'success', 
-          title: 'Successfully Saved!' 
+
+        setModalConfig({
+          show: true,
+          message: `${collegeName} has been saved to your list.`,
+          type: 'success',
+          title: 'Successfully Saved!'
         });
         setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
       }
     } catch (err) {
       console.error("Failed to save college:", err);
-      setModalConfig({ 
-        show: true, 
-        message: 'There was an error saving your college. Please try again.', 
-        type: 'error', 
-        title: 'Error' 
+      setModalConfig({
+        show: true,
+        message: 'There was an error saving your college. Please try again.',
+        type: 'error',
+        title: 'Error'
       });
       setTimeout(() => setModalConfig(prev => ({ ...prev, show: false })), 4000);
     }
   };
 
   useEffect(() => {
-    let results = collegesData.filter((college: College) => 
+    let results = collegesData.filter((college: College) =>
       college["University Name"].toLowerCase().includes(searchTerm.toLowerCase()) ||
       college.State.toLowerCase().includes(searchTerm.toLowerCase())
     );
@@ -144,7 +144,7 @@ export default function Discover() {
           </div>
           <h1>Find Your Dream College</h1>
           <p>
-            Explore India&apos;s most elite universities through a modern, 
+            Explore India&apos;s most elite universities through a modern,
             intelligent discovery interface.
           </p>
         </motion.div>
@@ -154,18 +154,18 @@ export default function Discover() {
       <section className="search-container-premium">
         <div className="premium-search-input-wrapper">
           <Search className="premium-search-icon" size={20} />
-          <input 
-            type="text" 
-            placeholder="Search by university name, state, or course..." 
+          <input
+            type="text"
+            placeholder="Search by university name, state, or course..."
             value={searchTerm}
             onChange={(e) => setSearchTerm(e.target.value)}
           />
         </div>
-        
+
         <div className="premium-filter-row">
-          <select 
+          <select
             className="premium-filter-select"
-            value={selectedTier} 
+            value={selectedTier}
             onChange={(e) => setSelectedTier(e.target.value)}
           >
             <option value="All">All University Tiers</option>
@@ -174,9 +174,9 @@ export default function Discover() {
             ))}
           </select>
 
-          <select 
+          <select
             className="premium-filter-select"
-            value={selectedState} 
+            value={selectedState}
             onChange={(e) => setSelectedState(e.target.value)}
           >
             <option value="All">All States in India</option>
@@ -193,7 +193,7 @@ export default function Discover() {
           SHOWING <span className="text-emerald">{filteredColleges.length}</span> CURATED INSTITUTIONS
         </div>
         <div style={{ fontWeight: 800, fontSize: '0.8rem', color: '#94a3b8', letterSpacing: '0.05em' }}>
-          UPDATED FOR 2025 ADMISSIONS
+          UPDATED FOR 2026 ADMISSIONS
         </div>
       </div>
 
@@ -201,7 +201,7 @@ export default function Discover() {
       <div className="discover-grid-premium">
         <AnimatePresence mode="popLayout">
           {filteredColleges.map((college: College, index: number) => (
-            <motion.div 
+            <motion.div
               key={college["University Name"]}
               layout
               initial={{ opacity: 0, y: 30 }}
@@ -221,9 +221,9 @@ export default function Discover() {
               <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
                 <h3 className="premium-uni-name" style={{ marginBottom: 0 }}>{college["University Name"]}</h3>
                 {college.URL && (
-                  <a 
-                    href={college.URL} 
-                    target="_blank" 
+                  <a
+                    href={college.URL}
+                    target="_blank"
                     rel="noopener noreferrer"
                     className="visit-link"
                     title="Visit Official Website"
@@ -232,7 +232,7 @@ export default function Discover() {
                   </a>
                 )}
               </div>
-              
+
               <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '1.5rem', fontSize: '0.85rem', fontWeight: 700, color: '#10b981' }}>
                 <Award size={16} />
                 {college["Accreditation / Ranking"]}
@@ -272,7 +272,7 @@ export default function Discover() {
       </div>
 
       {/* Soothing Bottom Notification Modal */}
-      <NotificationModal 
+      <NotificationModal
         show={modalConfig.show}
         message={modalConfig.message}
         type={modalConfig.type as any}

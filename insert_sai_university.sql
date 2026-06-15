@@ -1,0 +1,38 @@
+INSERT INTO "unisimplify-colleges" (
+  university_name, 
+  tier, 
+  state, 
+  application_deadline, 
+  application_fee, 
+  proprietary_test, 
+  cuet_policy, 
+  accreditation, 
+  avg_fees, 
+  url, 
+  admission_portal_url, 
+  source
+) VALUES (
+  'Sai University',
+  '1',
+  'Tamil Nadu',
+  'Rolling (Round 2: 15 May 2026; Final: 30 June 2026)',
+  '₹1,000',
+  'SaiU Admission Test / SAT',
+  'Yes',
+  'UGC Approved, Apollo Healthcare Alliance',
+  '₹3,50,000 – ₹6,00,000',
+  'https://saiuniversity.edu.in',
+  'https://saiuniversity.edu.in/admissions',
+  'Official Website'
+) ON CONFLICT (university_name) DO UPDATE SET
+  tier = EXCLUDED.tier,
+  state = EXCLUDED.state,
+  application_deadline = EXCLUDED.application_deadline,
+  application_fee = EXCLUDED.application_fee,
+  proprietary_test = EXCLUDED.proprietary_test,
+  cuet_policy = EXCLUDED.cuet_policy,
+  accreditation = EXCLUDED.accreditation,
+  avg_fees = EXCLUDED.avg_fees,
+  url = EXCLUDED.url,
+  admission_portal_url = EXCLUDED.admission_portal_url,
+  source = EXCLUDED.source;

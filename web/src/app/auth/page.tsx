@@ -6,6 +6,8 @@ import { Mail, Lock, User, ArrowRight, Sparkles, ShieldCheck, RefreshCcw, CheckC
 import { supabase } from '@/utils/supabase';
 import { useRouter, useSearchParams } from 'next/navigation';
 import Link from 'next/link';
+import { logLogin } from '@/utils/activity';
+import collegesDataRaw from '@/data/colleges.json';
 
 type AuthMode = 'login' | 'signup' | 'forgot-password';
 
@@ -16,6 +18,8 @@ function AuthContent() {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [fullName, setFullName] = useState('');
+  const [signupRole, setSignupRole] = useState<'student' | 'college'>('student');
+  const [selectedCollege, setSelectedCollege] = useState('');
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
@@ -24,7 +28,18 @@ function AuthContent() {
     // Check for existing session
     const checkSession = async () => {
       const { data: { session } } = await supabase.auth.getSession();
-      if (session) router.push('/dashboard');
+      if (session) {
+        // Log login on auto-session recovery
+        const userObj = session.user;
+        let role = userObj?.user_metadata?.role || 'student';
+        if (userObj.email?.toLowerCase() === 'sayak@kgphustlehouse.com') {
+          role = 'admin';
+        }
+        const name = userObj?.user_metadata?.full_name || userObj?.email?.split('@')[0] || 'User';
+        const collegeName = userObj?.user_metadata?.college_name;
+        logLogin(userObj.email || '', name, role, collegeName);
+        router.push('/dashboard');
+      }
     };
     checkSession();
 
@@ -46,20 +61,54 @@ function AuthContent() {
         const { error, data } = await supabase.auth.signInWithPassword({ email, password });
         if (error) throw error;
         console.log('Login successful:', data.user?.id);
+        
+        const userObj = data.user;
+        let role = userObj?.user_metadata?.role || 'student';
+        if (email.toLowerCase() === 'sayak@kgphustlehouse.com') {
+          role = 'admin';
+          await supabase.auth.updateUser({
+            data: { role: 'admin' }
+          });
+        }
+        const name = userObj?.user_metadata?.full_name || userObj?.email?.split('@')[0] || 'User';
+        const collegeName = userObj?.user_metadata?.college_name;
+        logLogin(email, name, role, collegeName);
+
         router.push('/dashboard');
       } else if (mode === 'signup') {
+        const metadata: any = {
+          full_name: fullName,
+          role: signupRole
+        };
+        
+        if (email.toLowerCase() === 'sayak@kgphustlehouse.com') {
+          metadata.role = 'admin';
+        }
+
+        if (signupRole === 'college') {
+          if (!selectedCollege) {
+            throw new Error('Please select a college to represent.');
+          }
+          metadata.college_name = selectedCollege;
+          const matchedCollege = collegesDataRaw.find(c => c["University Name"] === selectedCollege);
+          metadata.college_url = matchedCollege ? (matchedCollege.URL || 'https://saiuniversity.edu.in') : 'https://saiuniversity.edu.in';
+        }
+
         const { error, data } = await supabase.auth.signUp({
           email,
           password,
           options: {
-            data: { full_name: fullName }
+            data: metadata
           }
         });
         if (error) throw error;
         console.log('Signup initiated:', data.user?.id);
         
+        if (data.user) {
+          logLogin(email, fullName, metadata.role, metadata.college_name);
+        }
+
         if (data.session) {
-          // If auto-confirm is enabled in Supabase
           router.push('/dashboard');
         } else {
           setMessage('Check your email to confirm your account and start your journey!');
@@ -213,6 +262,76 @@ function AuthContent() {
                     onChange={(e) => setEmail(e.target.value)}
                   />
                 </div>
+                 <div className="auth-input-group">
+                  <label>Register As</label>
+                  <div style={{ display: 'flex', gap: '1rem', marginTop: '0.25rem' }}>
+                    <button
+                      type="button"
+                      onClick={() => setSignupRole('student')}
+                      style={{
+                        flex: 1,
+                        padding: '0.75rem',
+                        borderRadius: '10px',
+                        border: '1px solid',
+                        borderColor: signupRole === 'student' ? '#10b981' : '#e2e8f0',
+                        background: signupRole === 'student' ? 'rgba(16, 185, 129, 0.08)' : 'transparent',
+                        color: signupRole === 'student' ? '#10b981' : '#94a3b8',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      Student
+                    </button>
+                    <button
+                      type="button"
+                      onClick={() => setSignupRole('college')}
+                      style={{
+                        flex: 1,
+                        padding: '0.75rem',
+                        borderRadius: '10px',
+                        border: '1px solid',
+                        borderColor: signupRole === 'college' ? '#10b981' : '#e2e8f0',
+                        background: signupRole === 'college' ? 'rgba(16, 185, 129, 0.08)' : 'transparent',
+                        color: signupRole === 'college' ? '#10b981' : '#94a3b8',
+                        fontWeight: 700,
+                        cursor: 'pointer',
+                        transition: 'all 0.2s'
+                      }}
+                    >
+                      College Rep
+                    </button>
+                  </div>
+                </div>
+
+                {signupRole === 'college' && (
+                  <div className="auth-input-group">
+                    <label>Select Your University</label>
+                    <select
+                      value={selectedCollege}
+                      onChange={(e) => setSelectedCollege(e.target.value)}
+                      required
+                      style={{
+                        width: '100%',
+                        padding: '0.75rem',
+                        borderRadius: '10px',
+                        border: '1px solid #e2e8f0',
+                        background: 'transparent',
+                        color: '#fff',
+                        fontWeight: 600,
+                        outline: 'none'
+                      }}
+                    >
+                      <option value="" style={{ color: '#0f172a' }}>-- Choose University --</option>
+                      {collegesDataRaw.map(c => (
+                        <option key={c["University Name"]} value={c["University Name"]} style={{ color: '#0f172a' }}>
+                          {c["University Name"]}
+                        </option>
+                      ))}
+                    </select>
+                  </div>
+                )}
+
                 <div className="auth-input-group">
                   <label>Password</label>
                   <input 

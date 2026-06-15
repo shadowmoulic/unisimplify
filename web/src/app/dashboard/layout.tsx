@@ -26,6 +26,7 @@ export default function DashboardLayout({
   const pathname = usePathname();
   const [loading, setLoading] = useState(true);
   const [user, setUser] = useState<any>(null);
+  const [role, setRole] = useState<'student' | 'college' | 'admin'>('student');
   const [isSidebarOpen, setIsSidebarOpen] = useState(false);
 
   useEffect(() => {
@@ -35,6 +36,31 @@ export default function DashboardLayout({
         router.push('/auth');
       } else {
         setUser(session.user);
+        
+        let userRole: 'student' | 'college' | 'admin' = 'student';
+        try {
+          const { data: adminRecord } = await supabase
+            .from('unisimplify-college-admin')
+            .select('*')
+            .eq('email', session.user.email)
+            .maybeSingle();
+
+          if (adminRecord) {
+            userRole = adminRecord.role as any;
+          } else {
+            userRole = session.user.user_metadata?.role || 'student';
+            if (session.user.email?.toLowerCase() === 'sayak@kgphustlehouse.com') {
+              userRole = 'admin';
+            }
+          }
+        } catch (e) {
+          userRole = session.user.user_metadata?.role || 'student';
+          if (session.user.email?.toLowerCase() === 'sayak@kgphustlehouse.com') {
+            userRole = 'admin';
+          }
+        }
+        
+        setRole(userRole);
         setLoading(false);
       }
     };
@@ -97,6 +123,14 @@ export default function DashboardLayout({
             <Link href="/discover" className={`nav-item ${pathname === '/discover' ? 'active' : ''}`}>
               <Search size={20} />
               <span>College Search</span>
+            </Link>
+          </div>
+
+          <div className="nav-group">
+            <span className="group-label">PARTNER</span>
+            <Link href="/college-dashboard" className={`nav-item ${pathname === '/college-dashboard' ? 'active' : ''}`}>
+              <Building2 size={20} />
+              <span>College Portal</span>
             </Link>
           </div>
         </nav>
