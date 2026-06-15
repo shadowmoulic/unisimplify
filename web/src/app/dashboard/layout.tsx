@@ -1,12 +1,12 @@
 'use client';
 
 import React, { useEffect, useState } from 'react';
-import { 
-  Home, 
-  FileText, 
-  Building2, 
-  Search, 
-  Settings, 
+import {
+  Home,
+  FileText,
+  Building2,
+  Search,
+  Settings,
   LogOut,
   Menu,
   X,
@@ -36,7 +36,7 @@ export default function DashboardLayout({
         router.push('/auth');
       } else {
         setUser(session.user);
-        
+
         let userRole: 'student' | 'college' | 'admin' = 'student';
         try {
           const { data: adminRecord } = await supabase
@@ -59,7 +59,7 @@ export default function DashboardLayout({
             userRole = 'admin';
           }
         }
-        
+
         setRole(userRole);
         if (userRole === 'college') {
           router.push('/college-dashboard');
@@ -97,7 +97,7 @@ export default function DashboardLayout({
       <aside className="portal-sidebar desktop-only">
         <div className="sidebar-brand">
           <div className="brand-icon">
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"><path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" /></svg>
           </div>
           <span className="brand-text">UniSimplify</span>
         </div>
@@ -130,13 +130,7 @@ export default function DashboardLayout({
             </Link>
           </div>
 
-          <div className="nav-group">
-            <span className="group-label">PARTNER</span>
-            <Link href="/college-dashboard" className={`nav-item ${pathname === '/college-dashboard' ? 'active' : ''}`}>
-              <Building2 size={20} />
-              <span>College Portal</span>
-            </Link>
-          </div>
+
         </nav>
 
         <div className="sidebar-footer">
@@ -148,7 +142,7 @@ export default function DashboardLayout({
             <LogOut size={20} />
             <span>Sign out</span>
           </button>
-          
+
           <div className="user-card-mini">
             <div className="user-avatar">
               {userName.charAt(0)}
@@ -186,7 +180,7 @@ export default function DashboardLayout({
       </nav>
 
       {/* SIDEBAR OVERLAY */}
-      <div 
+      <div
         className={`sidebar-overlay ${isSidebarOpen ? 'active' : ''}`}
         onClick={() => setIsSidebarOpen(false)}
       />
