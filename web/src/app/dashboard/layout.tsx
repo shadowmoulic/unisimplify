@@ -61,6 +61,10 @@ export default function DashboardLayout({
         }
         
         setRole(userRole);
+        if (userRole === 'college') {
+          router.push('/college-dashboard');
+          return;
+        }
         setLoading(false);
       }
     };
