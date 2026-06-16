@@ -6,6 +6,8 @@ import { Search, Filter, MapPin, Calendar, CreditCard, Award, ChevronRight, Grad
 import NotificationModal from '@/components/NotificationModal';
 import { supabase } from '@/utils/supabase';
 import collegesDataRaw from '../../data/colleges.json';
+import Link from 'next/link';
+import { slugify } from '@/utils/slugify';
 
 interface College {
   "University Name": string;
@@ -235,8 +237,10 @@ export default function Discover() {
                 </div>
               </div>
 
-              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem' }}>
-                <h3 className="premium-uni-name" style={{ marginBottom: 0 }}>{college["University Name"]}</h3>
+              <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: '0.5rem', width: '100%' }}>
+                <Link href={`/university/${slugify(college["University Name"])}`} className="premium-uni-link">
+                  <h3 className="premium-uni-name" style={{ marginBottom: 0, marginTop: 0 }}>{college["University Name"]}</h3>
+                </Link>
                 {college.URL && (
                   <a
                     href={college.URL}
@@ -244,6 +248,7 @@ export default function Discover() {
                     rel="noopener noreferrer"
                     className="visit-link"
                     title="Visit Official Website"
+                    style={{ marginLeft: '1rem' }}
                   >
                     <ExternalLink size={16} />
                   </a>

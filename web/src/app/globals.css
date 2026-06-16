@@ -1146,6 +1146,16 @@ a {
   border: 1px solid rgba(16, 185, 129, 0.1);
 }
 
+.premium-uni-link {
+  text-decoration: none;
+  display: block;
+  flex: 1;
+}
+
+.premium-uni-link:hover .premium-uni-name {
+  color: #10b981;
+}
+
 .premium-uni-name {
   font-size: 1.6rem;
   font-weight: 800;
@@ -1153,6 +1163,7 @@ a {
   margin: 1.25rem 0 0.5rem;
   line-height: 1.15;
   letter-spacing: -0.03em;
+  transition: color 0.2s ease;
 }
 
 .premium-location {

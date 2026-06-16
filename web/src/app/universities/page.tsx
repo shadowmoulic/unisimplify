@@ -5,6 +5,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Search, MapPin, GraduationCap, ArrowRight, Building2, Globe, Users } from 'lucide-react';
 import collegesDataRaw from '../../data/colleges.json';
 import Link from 'next/link';
+import { slugify } from '@/utils/slugify';
 
 interface College {
   "University Name": string;
@@ -94,7 +95,7 @@ export default function UniversitiesDirectory() {
                 <h3>{college["University Name"]}</h3>
                 <p className="ranking-text">{college["Accreditation / Ranking"]}</p>
               </div>
-              <Link href={`/auth?mode=signup&university=${encodeURIComponent(college["University Name"])}`} className="dir-link">
+              <Link href={`/university/${slugify(college["University Name"])}`} className="dir-link">
                 View Details
                 <ArrowRight size={16} />
               </Link>
