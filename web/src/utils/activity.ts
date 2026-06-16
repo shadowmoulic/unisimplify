@@ -14,6 +14,7 @@ export interface UserProfile {
   preferredCourse?: string;
   appStatus?: 'Draft' | 'Applied' | 'Under Review' | 'Accepted' | 'Rejected';
   lastLogin?: string;
+  savedColleges?: string[];
 }
 
 export interface LoginLog {

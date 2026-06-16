@@ -1,0 +1,38 @@
+INSERT INTO "unisimplify-colleges" (
+  university_name, 
+  tier, 
+  state, 
+  application_deadline, 
+  application_fee, 
+  proprietary_test, 
+  cuet_policy, 
+  accreditation, 
+  avg_fees, 
+  url, 
+  admission_portal_url, 
+  source
+) VALUES (
+  'OPJU Raigarh',
+  '2',
+  'Chhattisgarh',
+  'Rolling Admissions (Academic Year 2026-27)',
+  '₹1,000 (Exempted for Female / CG Domicile SC/ST/OBC)',
+  'OPJU Test (OPJUET) / JEE / CAT / MAT',
+  'Optional',
+  'UGC & AICTE Approved, NIRF 101-125 Band (Management)',
+  '₹54,000 – ₹2,40,000',
+  'https://www.opju.ac.in',
+  'https://admissions.opju.ac.in',
+  'Official Website'
+) ON CONFLICT (university_name) DO UPDATE SET
+  tier = EXCLUDED.tier,
+  state = EXCLUDED.state,
+  application_deadline = EXCLUDED.application_deadline,
+  application_fee = EXCLUDED.application_fee,
+  proprietary_test = EXCLUDED.proprietary_test,
+  cuet_policy = EXCLUDED.cuet_policy,
+  accreditation = EXCLUDED.accreditation,
+  avg_fees = EXCLUDED.avg_fees,
+  url = EXCLUDED.url,
+  admission_portal_url = EXCLUDED.admission_portal_url,
+  source = EXCLUDED.source;

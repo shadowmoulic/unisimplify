@@ -93,19 +93,76 @@ export default function Dashboard() {
           return;
         }
 
-        let savedCount = 0;
-        const savedNames = localStorage.getItem(`saved_colleges_${session.user.id}`);
-        if (savedNames) {
-          const namesArray = JSON.parse(savedNames);
-          savedCount = namesArray.length;
-        }
+        // Sync local storage and Supabase saved colleges list
+        const syncLocalAndCloudColleges = async () => {
+          let localArray: string[] = [];
+          const savedNames = localStorage.getItem(`saved_colleges_${session.user.id}`);
+          if (savedNames) {
+            try {
+              localArray = JSON.parse(savedNames);
+            } catch (e) {}
+          }
 
-        setProfileData(prev => ({
-          ...prev,
-          collegesCount: savedCount
-        }));
+          try {
+            const { data: dbProfile, error: fetchError } = await supabase
+              .from('unisimplify-profiles')
+              .select('saved_colleges')
+              .eq('user_id', session.user.id)
+              .maybeSingle();
 
-        setLoading(false);
+            if (!fetchError && dbProfile && Array.isArray(dbProfile.saved_colleges)) {
+              const cloudArray = dbProfile.saved_colleges as string[];
+              const merged = Array.from(new Set([...localArray, ...cloudArray]));
+              
+              localStorage.setItem(`saved_colleges_${session.user.id}`, JSON.stringify(merged));
+              if (session.user.email) {
+                localStorage.setItem(`saved_colleges_${session.user.email}`, JSON.stringify(merged));
+              }
+
+              if (merged.length !== cloudArray.length) {
+                await supabase
+                  .from('unisimplify-profiles')
+                  .update({ saved_colleges: merged })
+                  .eq('user_id', session.user.id);
+              }
+              
+              setProfileData(prev => ({
+                ...prev,
+                collegesCount: merged.length
+              }));
+            } else {
+              if (localArray.length > 0) {
+                if (dbProfile) {
+                  await supabase
+                    .from('unisimplify-profiles')
+                    .update({ saved_colleges: localArray })
+                    .eq('user_id', session.user.id);
+                } else {
+                  await supabase
+                    .from('unisimplify-profiles')
+                    .upsert({
+                      user_id: session.user.id,
+                      email: session.user.email,
+                      saved_colleges: localArray
+                    });
+                }
+              }
+              setProfileData(prev => ({
+                ...prev,
+                collegesCount: localArray.length
+              }));
+            }
+          } catch (err) {
+            console.error("Error syncing colleges with cloud:", err);
+            setProfileData(prev => ({
+              ...prev,
+              collegesCount: localArray.length
+            }));
+          }
+          setLoading(false);
+        };
+
+        syncLocalAndCloudColleges();
       }
     };
     checkUser();

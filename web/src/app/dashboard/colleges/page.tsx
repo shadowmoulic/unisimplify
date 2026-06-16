@@ -84,7 +84,36 @@ export default function MyCollegesPage() {
   const handleRemove = (nameToRemove: string) => {
     const newSaved = savedColleges.filter(c => c["University Name"] !== nameToRemove);
     setSavedColleges(newSaved);
-    localStorage.setItem(`saved_colleges_${user.id}`, JSON.stringify(newSaved.map(c => c["University Name"])));
+    const newSavedNames = newSaved.map(c => c["University Name"]);
+    localStorage.setItem(`saved_colleges_${user.id}`, JSON.stringify(newSavedNames));
+    if (user?.email) {
+      localStorage.setItem(`saved_colleges_${user.email}`, JSON.stringify(newSavedNames));
+    }
+
+    // Sync removal to Supabase in the background
+    if (user) {
+      const syncRemovalToDb = async () => {
+        try {
+          const { data: profile } = await supabase
+            .from('unisimplify-profiles')
+            .select('saved_colleges')
+            .eq('user_id', user.id)
+            .maybeSingle();
+
+          if (profile) {
+            const existing = Array.isArray(profile.saved_colleges) ? profile.saved_colleges : [];
+            const filtered = existing.filter((c: string) => c !== nameToRemove);
+            await supabase
+              .from('unisimplify-profiles')
+              .update({ saved_colleges: filtered })
+              .eq('user_id', user.id);
+          }
+        } catch (dbErr) {
+          console.error("Failed to sync college removal to Supabase:", dbErr);
+        }
+      };
+      syncRemovalToDb();
+    }
   };
 
   if (loading) {

@@ -26,14 +26,12 @@ const collegesData = collegesDataRaw as College[];
 export default function Discover() {
   const [searchTerm, setSearchTerm] = useState('');
   const [filteredColleges, setFilteredColleges] = useState<College[]>(collegesData);
-  const [selectedTier, setSelectedTier] = useState('All');
   const [selectedState, setSelectedState] = useState('All');
   const [user, setUser] = useState<any>(null);
   const [savedColleges, setSavedColleges] = useState<string[]>([]);
   const [modalConfig, setModalConfig] = useState({ show: false, message: '', type: 'success', title: '' });
 
   const states = ['All', ...new Set(collegesData.map((c: College) => c.State))];
-  const tiers = ['All', '1', '2', '3'];
 
   useEffect(() => {
     let active = true;
@@ -92,6 +90,41 @@ export default function Discover() {
           localStorage.setItem(`saved_colleges_${user.email}`, JSON.stringify(newSaved));
         }
 
+        // Sync to Supabase in the background
+        const syncToDb = async () => {
+          try {
+            const { data: profile, error: fetchError } = await supabase
+              .from('unisimplify-profiles')
+              .select('saved_colleges')
+              .eq('user_id', user.id)
+              .maybeSingle();
+
+            if (!fetchError) {
+              const existingColleges = Array.isArray(profile?.saved_colleges) ? profile.saved_colleges : [];
+              if (!existingColleges.includes(collegeName)) {
+                const newColleges = [...existingColleges, collegeName];
+                if (profile) {
+                  await supabase
+                    .from('unisimplify-profiles')
+                    .update({ saved_colleges: newColleges })
+                    .eq('user_id', user.id);
+                } else {
+                  await supabase
+                    .from('unisimplify-profiles')
+                    .upsert({
+                      user_id: user.id,
+                      email: user.email,
+                      saved_colleges: newColleges
+                    });
+                }
+              }
+            }
+          } catch (dbErr) {
+            console.error("Failed to sync saved college to Supabase:", dbErr);
+          }
+        };
+        syncToDb();
+
         setModalConfig({
           show: true,
           message: `${collegeName} has been saved to your list.`,
@@ -118,16 +151,12 @@ export default function Discover() {
       college.State.toLowerCase().includes(searchTerm.toLowerCase())
     );
 
-    if (selectedTier !== 'All') {
-      results = results.filter((c: College) => c.Tier === selectedTier);
-    }
-
     if (selectedState !== 'All') {
       results = results.filter((c: College) => c.State === selectedState);
     }
 
     setFilteredColleges(results);
-  }, [searchTerm, selectedTier, selectedState]);
+  }, [searchTerm, selectedState]);
 
   return (
     <div className="discover-page-wrapper">
@@ -162,18 +191,7 @@ export default function Discover() {
           />
         </div>
 
-        <div className="premium-filter-row">
-          <select
-            className="premium-filter-select"
-            value={selectedTier}
-            onChange={(e) => setSelectedTier(e.target.value)}
-          >
-            <option value="All">All University Tiers</option>
-            {tiers.filter(t => t !== 'All').map(t => (
-              <option key={t} value={t}>Tier {t} Institutions</option>
-            ))}
-          </select>
-
+        <div className="premium-filter-row" style={{ gridTemplateColumns: '1fr' }}>
           <select
             className="premium-filter-select"
             value={selectedState}
@@ -210,8 +228,7 @@ export default function Discover() {
               transition={{ duration: 0.5, delay: index * 0.02 }}
               className="university-card-premium"
             >
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-                <div className="premium-tier-tag">Tier {college.Tier} Institution</div>
+              <div style={{ display: 'flex', justifyContent: 'flex-end', alignItems: 'center' }}>
                 <div className="premium-location">
                   <MapPin size={14} />
                   {college.State}

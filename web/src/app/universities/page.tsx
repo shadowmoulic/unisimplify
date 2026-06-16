@@ -86,7 +86,6 @@ export default function UniversitiesDirectory() {
               </div>
               <div className="dir-content">
                 <div style={{ display: 'flex', alignItems: 'center', gap: '0.5rem', marginBottom: '0.25rem' }}>
-                  <span className="tier-pill">Tier {college.Tier}</span>
                   <span className="state-label">
                     <MapPin size={12} />
                     {college.State}

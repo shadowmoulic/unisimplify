@@ -97,7 +97,19 @@ export default function CollegeDashboard() {
             percentage12: p.percentage_12 ? `${p.percentage_12}%` : undefined,
             preferredCourse: p.preferred_course || undefined,
             appStatus: 'Applied',
-            lastLogin: p.updated_at
+            lastLogin: p.updated_at,
+            savedColleges: Array.isArray(p.saved_colleges) ? p.saved_colleges : []
+          });
+        }
+      });
+
+      // Add simulated student profiles to ensure a populated dashboard demo
+      const simulated = getSimulatedUsers();
+      simulated.forEach(s => {
+        if (s.role === 'student' && !allUsers.some(u => u.email.toLowerCase() === s.email.toLowerCase())) {
+          allUsers.push({
+            ...s,
+            savedColleges: s.savedColleges || (s.email === 'sayak@kgphustlehouse.com' || s.email === 'priya.sharma@gmail.com' ? ['Sai University'] : [])
           });
         }
       });
@@ -374,6 +386,7 @@ export default function CollegeDashboard() {
   const targetedCollege = role === 'college' ? collegeName : 'Sai University';
   const collegeLogs = logs.filter(log => log.collegeName === targetedCollege);
   const collegeStudents = users.filter(u => u.role === 'student');
+  const savedCollegesStudents = users.filter(u => u.role === 'student' && u.savedColleges && u.savedColleges.includes(targetedCollege));
 
   return (
     <div className="portal-layout" style={{
@@ -538,11 +551,11 @@ export default function CollegeDashboard() {
 
                 <div className="dashboard-section" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1rem' }}>
-                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Registered for {targetedCollege}</span>
-                    <Users size={20} style={{ color: '#3b82f6' }} />
+                    <span style={{ fontSize: '0.85rem', fontWeight: 700, color: '#64748b', textTransform: 'uppercase' }}>Saved to List</span>
+                    <Users size={20} style={{ color: '#10b981' }} />
                   </div>
-                  <h2 style={{ fontSize: '2rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{collegeStudents.length}</h2>
-                  <span style={{ fontSize: '0.75rem', color: '#3b82f6', fontWeight: 600, display: 'block', marginTop: '0.5rem' }}>Universal Profile sync ok</span>
+                  <h2 style={{ fontSize: '2rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>{savedCollegesStudents.length}</h2>
+                  <span style={{ fontSize: '0.75rem', color: '#10b981', fontWeight: 600, display: 'block', marginTop: '0.5rem' }}>Added by interested students</span>
                 </div>
 
                 <div className="dashboard-section" style={{ background: '#ffffff', border: '1px solid #e2e8f0', borderRadius: '16px', padding: '1.5rem', boxShadow: '0 4px 20px rgba(0,0,0,0.03)' }}>
@@ -610,6 +623,62 @@ export default function CollegeDashboard() {
                             </tr>
                           );
                         })}
+                      </tbody>
+                    </table>
+                  </div>
+                )}
+              </div>
+
+              {/* INTERESTED STUDENTS (SAVED TO LIST) TABLE */}
+              <div className="dashboard-section" style={{
+                background: '#ffffff',
+                border: '1px solid #e2e8f0',
+                borderRadius: '20px',
+                padding: '2rem',
+                boxShadow: '0 4px 20px rgba(0,0,0,0.03)'
+              }}>
+                <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '1.5rem' }}>
+                  <h3 style={{ fontSize: '1.2rem', fontWeight: 800, margin: 0, color: '#0f172a' }}>Students Interested in {targetedCollege} ({savedCollegesStudents.length})</h3>
+                  <span style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 800, background: 'rgba(16, 185, 129, 0.1)', padding: '0.25rem 0.6rem', borderRadius: '6px' }}>Added to List</span>
+                </div>
+                
+                {savedCollegesStudents.length === 0 ? (
+                  <div style={{ textAlign: 'center', padding: '3rem 0', color: '#64748b' }}>
+                    <Users size={36} style={{ marginBottom: '1rem', color: '#94a3b8' }} />
+                    <p>No students have added {targetedCollege} to their list yet.</p>
+                  </div>
+                ) : (
+                  <div style={{ overflowX: 'auto' }}>
+                    <table style={{ width: '100%', borderCollapse: 'collapse', textAlign: 'left' }}>
+                      <thead>
+                        <tr style={{ borderBottom: '1px solid #e2e8f0', color: '#64748b', fontSize: '0.85rem', fontWeight: 700 }}>
+                          <th style={{ padding: '1rem 0.5rem' }}>STUDENT NAME</th>
+                          <th style={{ padding: '1rem 0.5rem' }}>EMAIL ADDRESS</th>
+                          <th style={{ padding: '1rem 0.5rem' }}>12TH MARKS / BOARD</th>
+                          <th style={{ padding: '1rem 0.5rem' }}>STATE</th>
+                          <th style={{ padding: '1rem 0.5rem' }}>PREFERRED COURSE</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {savedCollegesStudents.map((student) => (
+                          <tr key={student.id} style={{ borderBottom: '1px solid #f1f5f9', fontSize: '0.9rem' }}>
+                            <td style={{ padding: '1rem 0.5rem', fontWeight: 700, color: '#0f172a' }}>{student.fullName}</td>
+                            <td style={{ padding: '1rem 0.5rem', color: '#334155' }}>{student.email}</td>
+                            <td style={{ padding: '1rem 0.5rem', color: '#334155' }}>
+                              {student.percentage12 ? (
+                                <span><strong style={{ color: '#10b981' }}>{student.percentage12}</strong> ({student.board12 || 'N/A'})</span>
+                              ) : (
+                                <span style={{ color: '#94a3b8' }}>Profile incomplete</span>
+                              )}
+                            </td>
+                            <td style={{ padding: '1rem 0.5rem', color: '#64748b' }}>
+                              {student.state || 'N/A'}
+                            </td>
+                            <td style={{ padding: '1rem 0.5rem', color: '#334155', fontWeight: 600 }}>
+                              {student.preferredCourse || 'N/A'}
+                            </td>
+                          </tr>
+                        ))}
                       </tbody>
                     </table>
                   </div>
