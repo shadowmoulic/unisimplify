@@ -1,8 +1,8 @@
 'use client';
 
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Search, MapPin, GraduationCap, ArrowRight, Building2, Globe, Users } from 'lucide-react';
+import { Search, MapPin, ArrowRight, Building2 } from 'lucide-react';
 import collegesDataRaw from '../../data/colleges.json';
 import Link from 'next/link';
 import { slugify } from '@/utils/slugify';
@@ -24,15 +24,11 @@ const collegesData = collegesDataRaw as College[];
 
 export default function UniversitiesDirectory() {
   const [searchTerm, setSearchTerm] = useState('');
-  const [filteredColleges, setFilteredColleges] = useState<College[]>(collegesData);
 
-  useEffect(() => {
-    const results = collegesData.filter((college: College) =>
-      college["University Name"].toLowerCase().includes(searchTerm.toLowerCase()) ||
-      college.State.toLowerCase().includes(searchTerm.toLowerCase())
-    );
-    setFilteredColleges(results);
-  }, [searchTerm]);
+  const filteredColleges = collegesData.filter((college: College) =>
+    college["University Name"].toLowerCase().includes(searchTerm.toLowerCase()) ||
+    college.State.toLowerCase().includes(searchTerm.toLowerCase())
+  );
 
   return (
     <div className="discover-page-wrapper">
