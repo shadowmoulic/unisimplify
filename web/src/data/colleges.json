@@ -442,5 +442,61 @@
     "Source": "Official Website",
     "URL": "https://www.opju.ac.in",
     "AdmissionPortalURL": "https://admissions.opju.ac.in"
+  },
+  {
+    "University Name": "Abhilashi University",
+    "Tier": "3",
+    "State": "Himachal Pradesh",
+    "Application Deadline": "Rolling Admissions (Academic Year 2026-27)",
+    "Application Fee (INR)": "₹1,000",
+    "Proprietary Test": "None (Merit-based)",
+    "CUET Acceptance Policy": "Optional",
+    "Accreditation / Ranking": "NAAC B+, UGC Recognised",
+    "Average Annual Fees (INR)": "₹50,000 – ₹2,50,000",
+    "Source": "Official Website",
+    "URL": "https://www.abhilashiuniversity.ac.in",
+    "AdmissionPortalURL": "https://www.abhilashiuniversity.ac.in/admission"
+  },
+  {
+    "University Name": "Adamas University",
+    "Tier": "2",
+    "State": "West Bengal",
+    "Application Deadline": "Rolling Admissions (Academic Year 2026-27)",
+    "Application Fee (INR)": "₹1,000",
+    "Proprietary Test": "AUAT / None (uses JEE/WBJEE)",
+    "CUET Acceptance Policy": "Yes",
+    "Accreditation / Ranking": "NAAC A, UGC Recognised",
+    "Average Annual Fees (INR)": "₹1,20,000 – ₹3,00,000",
+    "Source": "Official Website",
+    "URL": "https://adamasuniversity.ac.in",
+    "AdmissionPortalURL": "https://admissions.adamasuniversity.ac.in"
+  },
+  {
+    "University Name": "Adesh University",
+    "Tier": "3",
+    "State": "Punjab",
+    "Application Deadline": "Rolling Admissions (Academic Year 2026-27)",
+    "Application Fee (INR)": "₹2,000",
+    "Proprietary Test": "None (uses NEET / Merit)",
+    "CUET Acceptance Policy": "No",
+    "Accreditation / Ranking": "UGC Recognised, Approved by NMC/PCI/INC",
+    "Average Annual Fees (INR)": "₹80,000 – ₹3,50,000",
+    "Source": "Official Website",
+    "URL": "http://www.adeshuniversity.ac.in",
+    "AdmissionPortalURL": "http://www.adeshuniversity.ac.in/admissions"
+  },
+  {
+    "University Name": "Adikavi Nannaya University",
+    "Tier": "3",
+    "State": "Andhra Pradesh",
+    "Application Deadline": "Rolling Admissions (Academic Year 2026-27)",
+    "Application Fee (INR)": "₹500 – ₹700",
+    "Proprietary Test": "AKNUCET / AP RCET",
+    "CUET Acceptance Policy": "Yes",
+    "Accreditation / Ranking": "NAAC B+, UGC Recognised",
+    "Average Annual Fees (INR)": "₹15,000 – ₹80,000",
+    "Source": "Official Website",
+    "URL": "https://www.aknu.edu.in",
+    "AdmissionPortalURL": "https://www.aknu.edu.in/Admissions"
   }
 ]
