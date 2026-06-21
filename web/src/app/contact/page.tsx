@@ -2,7 +2,7 @@
 
 import React from 'react';
 import { motion } from 'framer-motion';
-import { Mail, MessageSquare, MapPin, Send, ArrowLeft } from 'lucide-react';
+import { Mail, MessageSquare, MapPin, Send, ArrowLeft, Phone } from 'lucide-react';
 import Link from 'next/link';
 
 export default function ContactUs() {
@@ -12,9 +12,9 @@ export default function ContactUs() {
         <ArrowLeft size={18} />
         Back to Home
       </Link>
-      
+
       <header className="policy-header">
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}
         >
@@ -28,7 +28,7 @@ export default function ContactUs() {
       </header>
 
       <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '2rem', marginBottom: '4rem' }}>
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.1 }}
@@ -43,22 +43,22 @@ export default function ContactUs() {
               </div>
               <div>
                 <div style={{ fontWeight: 800, color: '#0f172a' }}>Email</div>
-                <div style={{ color: '#64748b' }}>support@unisimplify.in</div>
+                <div style={{ color: '#64748b' }}>sayak@liquivest.com</div>
               </div>
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: '1rem' }}>
               <div style={{ background: 'rgba(16, 185, 129, 0.1)', color: '#10b981', padding: '0.75rem', borderRadius: '12px' }}>
-                <MapPin size={20} />
+                <Phone size={20} />
               </div>
               <div>
-                <div style={{ fontWeight: 800, color: '#0f172a' }}>Office</div>
-                <div style={{ color: '#64748b' }}>Gurugram, Haryana, India</div>
+                <div style={{ fontWeight: 800, color: '#0f172a' }}>Phone</div>
+                <div style={{ color: '#64748b' }}>+91 98932 74900</div>
               </div>
             </div>
           </div>
         </motion.div>
 
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, x: 20 }}
           animate={{ opacity: 1, x: 0 }}
           transition={{ delay: 0.2 }}

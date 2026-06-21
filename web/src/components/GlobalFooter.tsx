@@ -77,6 +77,7 @@ export default function GlobalFooter() {
             <Link href="/privacy">Privacy Policy</Link>
             <Link href="/terms">Terms of Service</Link>
             <Link href="/onboarding">How it Works</Link>
+            <Link href="/about">About Us</Link>
           </div>
 
           <div className="footer-newsletter">
