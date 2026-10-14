@@ -38,7 +38,7 @@ interface TeamMember {
 const team: TeamMember[] = [
   {
     name: "Shivam Agrawal",
-    role: "Co-Founder & CEO",
+    role: "Founder & CEO",
     image: "https://liquivest.in/team/shivam.png",
     linkedin: "https://www.linkedin.com/in/shivamagrawal5/",
     bio: "I think in clarity where most people see complexity. A student's ambition should travel further than their postcode.",
@@ -58,7 +58,7 @@ const team: TeamMember[] = [
   // },
   {
     name: "Sayak Moulic",
-    role: "Co-Founder & CTO",
+    role: "CTO",
     image: "https://liquivest.in/team/sayak.jpeg",
     linkedin: "https://www.linkedin.com/in/sayak-moulic-ai-voice-agents-seo/",
     bio: "Architecting the predictive engines that safeguard industrial cashflow.",
