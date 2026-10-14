@@ -7,15 +7,15 @@ import Link from 'next/link';
 import Image from 'next/image';
 
 const LinkedinIcon = ({ size = 20 }: { size?: number }) => (
-  <svg 
-    xmlns="http://www.w3.org/2000/svg" 
-    width={size} 
-    height={size} 
-    viewBox="0 0 24 24" 
-    fill="none" 
-    stroke="currentColor" 
-    strokeWidth="2" 
-    strokeLinecap="round" 
+  <svg
+    xmlns="http://www.w3.org/2000/svg"
+    width={size}
+    height={size}
+    viewBox="0 0 24 24"
+    fill="none"
+    stroke="currentColor"
+    strokeWidth="2"
+    strokeLinecap="round"
     strokeLinejoin="round"
   >
     <path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z" />
@@ -41,21 +41,21 @@ const team: TeamMember[] = [
     role: "Co-Founder & CEO",
     image: "https://liquivest.in/team/shivam.png",
     linkedin: "https://www.linkedin.com/in/shivamagrawal5/",
-    bio: "I think in clarity where most people see complexity.",
+    bio: "I think in clarity where most people see complexity. A student's ambition should travel further than their postcode.",
     accent: "rgb(16, 185, 129)", // Emerald
     accentGlow: "rgba(16, 185, 129, 0.15)",
     icon: <ShieldCheck size={18} className="text-emerald" />
   },
-  {
-    name: "Rajveer Ranjan",
-    role: "Co-Founder & CMO",
-    image: "https://liquivest.in/team/rajveer.jpeg",
-    linkedin: "https://in.linkedin.com/in/rajveer-ranjan-97034b396",
-    bio: "Driving the vision to digitize MSME financial intelligence across India. Building the future of manufacturing finance.",
-    accent: "rgb(139, 92, 246)", // Purple
-    accentGlow: "rgba(139, 92, 246, 0.15)",
-    icon: <Zap size={18} style={{ color: "rgb(139, 92, 246)" }} />
-  },
+  // {
+  //   name: "Rajveer Ranjan",
+  //   role: "Co-Founder & CMO",
+  //   image: "https://liquivest.in/team/rajveer.jpeg",
+  //   linkedin: "https://in.linkedin.com/in/rajveer-ranjan-97034b396",
+  //   bio: "Driving the vision to digitize MSME financial intelligence across India. Building the future of manufacturing finance.",
+  //   accent: "rgb(139, 92, 246)", // Purple
+  //   accentGlow: "rgba(139, 92, 246, 0.15)",
+  //   icon: <Zap size={18} style={{ color: "rgb(139, 92, 246)" }} />
+  // },
   {
     name: "Sayak Moulic",
     role: "Co-Founder & CTO",
@@ -71,7 +71,7 @@ const team: TeamMember[] = [
 export default function AboutPage() {
   return (
     <div className="policy-container" style={{ maxWidth: '1200px', margin: '4rem auto', padding: '0 2rem' }}>
-      
+
       {/* Back Button */}
       <Link href="/" className="btn-icon" style={{ marginBottom: '2.5rem', display: 'inline-flex', alignItems: 'center', gap: '0.5rem', color: '#64748b', fontWeight: 700, transition: 'color 0.2s' }}>
         <ArrowLeft size={18} />
@@ -80,7 +80,7 @@ export default function AboutPage() {
 
       {/* Hero Section */}
       <header className="policy-header" style={{ marginBottom: '5rem', textAlign: 'center' }}>
-        <motion.div 
+        <motion.div
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.6 }}
@@ -160,10 +160,10 @@ export default function AboutPage() {
               position: 'relative',
               background: '#f1f5f9'
             }}>
-              <Image 
-                alt={member.name} 
-                src={member.image} 
-                fill 
+              <Image
+                alt={member.name}
+                src={member.image}
+                fill
                 sizes="140px"
                 style={{ objectFit: 'cover' }}
                 priority={index === 0}
@@ -171,19 +171,19 @@ export default function AboutPage() {
             </div>
 
             {/* Role Badge */}
-            <div style={{ 
-              display: 'flex', 
-              alignItems: 'center', 
-              gap: '0.4rem', 
-              padding: '0.4rem 1rem', 
-              background: member.accentGlow, 
-              color: member.accent, 
-              borderRadius: '100px', 
-              fontSize: '0.75rem', 
-              fontWeight: 800, 
+            <div style={{
+              display: 'flex',
+              alignItems: 'center',
+              gap: '0.4rem',
+              padding: '0.4rem 1rem',
+              background: member.accentGlow,
+              color: member.accent,
+              borderRadius: '100px',
+              fontSize: '0.75rem',
+              fontWeight: 800,
               letterSpacing: '1px',
-              textTransform: 'uppercase', 
-              marginBottom: '1rem' 
+              textTransform: 'uppercase',
+              marginBottom: '1rem'
             }}>
               {member.icon}
               <span>{member.role}</span>
@@ -200,11 +200,11 @@ export default function AboutPage() {
             </p>
 
             {/* Social Link */}
-            <a 
-              href={member.linkedin} 
-              target="_blank" 
-              rel="noopener noreferrer" 
-              style={{ 
+            <a
+              href={member.linkedin}
+              target="_blank"
+              rel="noopener noreferrer"
+              style={{
                 display: 'flex',
                 alignItems: 'center',
                 justifyContent: 'center',
